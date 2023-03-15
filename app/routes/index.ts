@@ -8,6 +8,6 @@ const Post=require('./post');
 
 module.exports = function(app){
     app.use('/home',Home);
-    app.use('/blog',Blog);
-    app.use('/post',Post);
+    app.use('/blogs',Blog);
+    app.use('/posts',Post);
 };
