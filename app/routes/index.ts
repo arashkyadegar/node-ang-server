@@ -1,7 +1,8 @@
-
-
 var express = require('express');
 const router=express.Router();
+// is it ok when adding routers with 'require'
+//but it gets error when changing it to import
+// why??
 const Home=require('./home');
 const Blog=require('./blog');
 const Post=require('./post');
