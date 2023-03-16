@@ -1,4 +1,4 @@
-export abstract class AbBlog {
+export abstract class AbsBlog {
    private id:number;
    private blogTitle:string;
    private blogText:string;
@@ -10,8 +10,7 @@ export abstract class AbBlog {
             this.blogText=blogtext;
             this.rate=rate;
             this.user=user;
-        }
-            
+        } 
     public get getId():number{
         return this.id;
     }
@@ -48,22 +47,20 @@ export abstract class AbBlog {
     }
 }
 
-export class BlogEntityNull extends AbBlog {
+export class BlogEntityNull extends AbsBlog {
     constructor(){
         super(0,"empty","empty",0,0);
     }
-
 }
 
-export class BlogEntity extends AbBlog {
+export class BlogEntity extends AbsBlog {
     constructor(id:number,blogTitle:string,blogtext:string,rate:number,user:number){
         super(id,blogTitle,blogtext,rate,user);
     }
-
 }
 
 module.exports={
-    AbBlog,
+    AbsBlog,
     BlogEntityNull,
     BlogEntity
 }

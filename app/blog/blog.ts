@@ -3,6 +3,7 @@ import {BlogEntityNull} from './blogEntity'
 export const BlogRouter=express.Router();
         BlogRouter.get("/",async function(req,res){
             const b=new BlogEntityNull()
+
             res.send(b);
 
         });
