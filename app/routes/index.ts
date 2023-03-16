@@ -5,7 +5,7 @@ const router=express.Router();
 // why??
 
 const Home=require('./home');
-const Blog=require('./blog/blogRouter');
+const Blog=require('./blog');
 const Post=require('./post');
 
 module.exports = function(app){
