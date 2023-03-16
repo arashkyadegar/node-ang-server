@@ -4,12 +4,12 @@ const router=express.Router();
 //but it gets error when changing it to import
 // why??
 
-const Home=require('./home');
-const Blog=require('./blog');
-const Post=require('./post');
+const HomeRouter=require('../home/home');
+const BlogRouter=require('../blog/blog');
+const PostRouter=require('../post/post');
 
 module.exports = function(app){
-    app.use('/home',Home);
-    app.use('/blogs',Blog);
-    app.use('/posts',Post);
+    app.use('/home',HomeRouter);
+    app.use('/blogs',BlogRouter);
+    app.use('/posts',PostRouter);
 };

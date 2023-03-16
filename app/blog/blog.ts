@@ -2,7 +2,8 @@ import express from 'express';
 
 export const BlogRouter=express.Router();
         BlogRouter.get("/",async function(req,res){
-            res.send({name:'blog get  getList'});
+            //const b=new BlogEntityNull()
+            res.send({name:'arashk hastam'});
 
         });
 
