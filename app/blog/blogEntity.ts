@@ -1,61 +1,61 @@
-abstract class AbBlog {
-   private _id:number;
-   private _blogTitle:string;
-   private _blogText:string;
-   private  _rate:number;
-   private  _user:number;
+export abstract class AbBlog {
+   private id:number;
+   private blogTitle:string;
+   private blogText:string;
+   private rate:number;
+   private user:number;
         constructor(id:number,blogTitle:string,blogtext:string,rate:number,user:number){
-            this._id=id;
-            this._blogTitle=blogTitle;
-            this._blogText=blogtext;
-            this._rate=rate;
-            this._user=user;
+            this.id=id;
+            this.blogTitle=blogTitle;
+            this.blogText=blogtext;
+            this.rate=rate;
+            this.user=user;
         }
             
-    public get id():number{
+    public get getId():number{
         return this.id;
     }
-    public set id(value) {
+    public set setId(value) {
         this.id=value;
     }
 
-    public get blogTitle():string{
-        return this._blogTitle;
+    public get getBlogTitle():string{
+        return this.blogTitle;
     }
-    public set blogTitle(value) {
-        this._blogTitle=value;
-    }
-
-    public get blogText():string{
-        return this._blogText;
-    }
-    public set blogText(value) {
-        this._blogText=value;
+    public set setBlogTitle(value) {
+        this.blogTitle=value;
     }
 
-    public get rate():number{
-        return this._rate;
+    public get setBlogText():string{
+        return this.blogText;
     }
-    public set rate(value) {
-        this._rate=value;
+    public set getBlogText(value) {
+        this.blogText=value;
     }
 
-    public get user():number{
-        return this._user;
+    public get getRate():number{
+        return this.rate;
     }
-    public set user(value) {
-        this._user=value;
+    public set setRate(value) {
+        this.rate=value;
+    }
+
+    public get getUser():number{
+        return this.user;
+    }
+    public set setUser(value) {
+        this.user=value;
     }
 }
 
-class BlogEntityNull extends AbBlog {
+export class BlogEntityNull extends AbBlog {
     constructor(){
         super(0,"empty","empty",0,0);
     }
 
 }
 
-class BlogEntity extends AbBlog {
+export class BlogEntity extends AbBlog {
     constructor(id:number,blogTitle:string,blogtext:string,rate:number,user:number){
         super(id,blogTitle,blogtext,rate,user);
     }

@@ -1,9 +1,9 @@
 import express from 'express';
-
+import {BlogEntityNull} from './blogEntity'
 export const BlogRouter=express.Router();
         BlogRouter.get("/",async function(req,res){
-            //const b=new BlogEntityNull()
-            res.send({name:'arashk hastam'});
+            const b=new BlogEntityNull()
+            res.send(b);
 
         });
 
