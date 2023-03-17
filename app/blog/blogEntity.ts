@@ -15,6 +15,7 @@ import {
 
   export interface IBlog {
         id:number;
+
         blogTitle:string;
         blogText:string;
         rate:number;
@@ -23,7 +24,7 @@ import {
 
 export class BlogEntity implements IBlog {
     id: number=0;;
-    @Length(1,10)
+    @Length(3,10)
     blogTitle: string="";
     blogText: string="";
     rate: number=0;
