@@ -1,5 +1,20 @@
+import {
+    validate,
+    validateOrReject,
+    Contains,
+    IsInt,
+    Length,
+    IsEmail,
+    IsFQDN,
+    IsDate,
+    Min,
+    Max,
+    min,
+    MAX,
+  } from 'class-validator';
 export abstract class AbsBlog {
    private id:number;
+   @Max(3)
    private blogTitle:string;
    private blogText:string;
    private rate:number;
@@ -49,7 +64,7 @@ export abstract class AbsBlog {
 
 export class BlogEntityNull extends AbsBlog {
     constructor(){
-        super(0,"empty","empty",0,0);
+        super(0,"","",0,0);
     }
 }
 
