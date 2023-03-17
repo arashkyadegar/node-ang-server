@@ -7,7 +7,7 @@ export interface BlogBus {
     deleteOne(id:number):boolean; //returns true if operation was successful othewise false.
 }
 
-export class BlogBusMongoDB implements BlogBus {
+export class BlogBusConc implements BlogBus {
     insertOne(b: BlogEntity): BlogEntity {
         throw new Error('Method not implemented.');
     }

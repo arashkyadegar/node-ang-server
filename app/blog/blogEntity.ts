@@ -58,7 +58,6 @@ export class BlogEntity extends AbsBlog {
         super(id,blogTitle,blogtext,rate,user);
     }
 }
-
 module.exports={
     AbsBlog,
     BlogEntityNull,
