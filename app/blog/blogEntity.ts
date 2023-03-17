@@ -12,20 +12,22 @@ import {
     min,
     MAX,
   } from 'class-validator';
-export abstract class AbsBlog {
-   private id:number;
-   @Max(3)
-   private blogTitle:string;
-   private blogText:string;
-   private rate:number;
-   private user:number;
-        constructor(id:number,blogTitle:string,blogtext:string,rate:number,user:number){
-            this.id=id;
-            this.blogTitle=blogTitle;
-            this.blogText=blogtext;
-            this.rate=rate;
-            this.user=user;
-        } 
+
+  export interface IBlog {
+        id:number;
+        blogTitle:string;
+        blogText:string;
+        rate:number;
+        user:number;
+  }
+
+export class BlogEntity implements IBlog {
+    id: number=0;;
+    @Length(1,10)
+    blogTitle: string="";
+    blogText: string="";
+    rate: number=0;
+    user: number=0;
     public get getId():number{
         return this.id;
     }
@@ -40,10 +42,10 @@ export abstract class AbsBlog {
         this.blogTitle=value;
     }
 
-    public get setBlogText():string{
+    public get getBlogText():string{
         return this.blogText;
     }
-    public set getBlogText(value) {
+    public set setBlogText(value) {
         this.blogText=value;
     }
 
@@ -62,19 +64,7 @@ export abstract class AbsBlog {
     }
 }
 
-export class BlogEntityNull extends AbsBlog {
-    constructor(){
-        super(0,"","",0,0);
-    }
-}
 
-export class BlogEntity extends AbsBlog {
-    constructor(id:number,blogTitle:string,blogtext:string,rate:number,user:number){
-        super(id,blogTitle,blogtext,rate,user);
-    }
-}
 module.exports={
-    AbsBlog,
-    BlogEntityNull,
     BlogEntity
 }
