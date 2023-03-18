@@ -9,13 +9,14 @@
     "express": "^4.18.2"
   },
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc --watch",
     "start": "node dist/app.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\""
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^18.15.2",
+    "class-validator": "^0.14.0",
     "concurrently": "^7.6.0",
     "nodemon": "^2.0.21",
     "typescript": "^4.9.5"
