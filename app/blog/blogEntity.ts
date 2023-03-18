@@ -12,14 +12,15 @@ import {
     min,
     MAX,
   } from 'class-validator';
+import { IPost } from '../post/postEntity';
 
   export interface IBlog {
         id:number;
-
         blogTitle:string;
         blogText:string;
         rate:number;
         user:number;
+        posts:Array<IPost>;
   }
 
 export class BlogEntity implements IBlog {
@@ -29,11 +30,19 @@ export class BlogEntity implements IBlog {
     blogText: string="";
     rate: number=0;
     user: number=0;
+    posts:Array<IPost>=[];
     public get getId():number{
         return this.id;
     }
     public set setId(value) {
         this.id=value;
+    }
+
+    public get getPosts():Array<IPost>{
+        return this.posts;
+    }
+    public set setPosts(value) {
+        this.posts=value;
     }
 
     public get getBlogTitle():string{
