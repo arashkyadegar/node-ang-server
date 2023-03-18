@@ -1,6 +1,7 @@
 import {IBlog,BlogEntity} from './blogEntity';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
+import { PostBusConc } from '../post/postBus';
 export interface BlogBus {
      insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Array<BlogEntity>; // returns Array of objects.
@@ -26,7 +27,7 @@ export class BlogBusConc implements BlogBus {
         return x;
     }
 
-    findOne(id: number): BlogEntity {
+     findOne(id: number): BlogEntity {
         throw new Error('Method not implemented.');
     }
 
