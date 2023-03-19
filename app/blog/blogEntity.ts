@@ -13,23 +13,23 @@ import {
     MAX,
   } from 'class-validator';
 import { IPost } from '../post/postEntity';
+import { IUser, UserEntity } from '../user/userEntity';
 
   export interface IBlog {
         id:number;
-        blogTitle:string;
-        blogText:string;
+        title:string;
+        author:IUser;
+        body:string;
         rate:number;
-        user:number;
         posts:Array<IPost>;
   }
 
 export class BlogEntity implements IBlog {
-    id: number=0;;
-    @Length(3,10)
-    blogTitle: string="";
-    blogText: string="";
+    id: number=0;
+    title: string="";
+    body: string="";
     rate: number=0;
-    user: number=0;
+    author=new UserEntity();
     posts:Array<IPost>=[];
     public get getId():number{
         return this.id;
@@ -45,18 +45,18 @@ export class BlogEntity implements IBlog {
         this.posts=value;
     }
 
-    public get getBlogTitle():string{
-        return this.blogTitle;
+    public get getTitle():string{
+        return this.title;
     }
-    public set setBlogTitle(value) {
-        this.blogTitle=value;
+    public set setTitle(value) {
+        this.title=value;
     }
 
-    public get getBlogText():string{
-        return this.blogText;
+    public get getBody():string{
+        return this.body;
     }
-    public set setBlogText(value) {
-        this.blogText=value;
+    public set setBody(value) {
+        this.body=value;
     }
 
     public get getRate():number{
@@ -66,11 +66,11 @@ export class BlogEntity implements IBlog {
         this.rate=value;
     }
 
-    public get getUser():number{
-        return this.user;
+    public get getAuthor():IUser{
+        return this.author;
     }
-    public set setUser(value) {
-        this.user=value;
+    public set setAuthor(value) {
+        this.author=value;
     }
 }
 
