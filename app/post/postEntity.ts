@@ -8,8 +8,7 @@ export interface IPost {
     rate:number;
     user:number;
     img:string;
-    date:Date;
-    blog:number;
+    date:string;
     isVisible:boolean;
     comments:Array<IComment>;
     documents:Array<IDocument>;
@@ -22,8 +21,7 @@ export class PostEntity implements IPost {
     rate: number=0;
     user: number=0;
     img: string="";
-    blog:number=0;
-    date= new Date();
+    date:string="";
     isVisible: boolean=false;
     comments: IComment[]=[];
     documents: IDocument[]=[];
@@ -34,15 +32,6 @@ export class PostEntity implements IPost {
     public set setId(value) {
         this.id=value;
     }
-
-    public get getBlog():number{
-        return this.blog;
-    }
-    public set setBlog(value) {
-        this.blog=value;
-    }
-
-
     public get getTitle():string{
         return this.title;
     }
@@ -79,7 +68,7 @@ export class PostEntity implements IPost {
         this.img=value;
     }
 
-    public get getDate():Date{
+    public get getDate():string{
         return this.date;
     }
     public set setDate(value) {
