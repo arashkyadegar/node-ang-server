@@ -85,14 +85,18 @@ export const BlogRouter=express.Router();
         });
 
         BlogRouter.delete("/:id",async function(req,res){
-              // check if req.params is digit or not
-              if(!parseInt(req.params.id)) {
-                res.statusCode=400;
-                res.send({'validation failed. errors: ':' bad params'});                  
+              const bus=new BlogBusConc();
+              let rslt=new BlogEntity();
+              let tmp_id=req.params.id;
+              rslt =await bus.deleteOne(tmp_id);
+              if(rslt){
+                res.statusCode=200;
+                res.send(rslt);
               }else{
-                const tmp_id=parseInt(req.params.id);
-                res.send({tmp_id});
+                res.statusCode=404;
+                res.send(rslt);
               }
+
         });
             
 module.exports=BlogRouter;

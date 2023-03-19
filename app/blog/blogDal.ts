@@ -7,7 +7,7 @@ export interface BlogDal {
     find():Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(id:number,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
-    deleteOne(id:number):boolean; //returns true if delete is successful othewise false.
+    deleteOne(id:string):Promise<BlogEntity> ; //returns true if delete is successful othewise false.
 }
 export class BlogDalConc implements BlogDal {
      async insertOne(b: BlogEntity): Promise<boolean> {
@@ -31,8 +31,12 @@ export class BlogDalConc implements BlogDal {
     updateOne(id: number, b: BlogEntity): Promise<boolean> {
         throw new Error('Method not implemented.');
     }
-    deleteOne(id: number): boolean {
-        throw new Error('Method not implemented.');
+  async  deleteOne(id: string): Promise<BlogEntity>  {
+
+    const schema = require('../blog/blogSchema');
+    var ObjectId =new mongoose.Types.ObjectId(id);
+    let rslt= await schema.findOneAndRemove({'_id':ObjectId});
+    return rslt;
     }
 
 }

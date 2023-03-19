@@ -8,7 +8,7 @@ export interface BlogBus {
     find():Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(id:number,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
-    deleteOne(id:number):boolean; //returns true if delete is successful othewise false.
+    deleteOne(id:string):Promise<BlogEntity>; //returns true if delete is successful othewise false.
 }
 
 export class BlogBusConc implements BlogBus {
@@ -46,7 +46,10 @@ export class BlogBusConc implements BlogBus {
                 return false;
                 return true;
     }
-    deleteOne(id: number): boolean {
-        throw new Error('Method not implemented.');
+   async deleteOne(id: string): Promise<BlogEntity> {
+        const db=new BlogDalConc();
+        //const p=await validate(blog);
+        const rslt=await db.deleteOne(id);
+        return rslt;
     }
 }
