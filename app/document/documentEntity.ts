@@ -1,17 +1,16 @@
 import { IPost, PostEntity } from "../post/postEntity";
 
 export interface IDocument {
-    id:number;
     title:string;
-    url:string;
-    category:number;
+   /* url:string;
+    category:number;*/
 
 }
 export class DocumentEntity implements IDocument {
     id: number=0;
     title: string="";
-    url: string="";
-    category: number=0;
+    /*url: string="";
+    category: number=0;*/
 
 
     public get getId():number{
@@ -27,7 +26,7 @@ export class DocumentEntity implements IDocument {
     public set setTitle(value) {
         this.title=value;
     }
-
+/*
     public get getUrl():string{
         return this.url;
     }
@@ -40,7 +39,7 @@ export class DocumentEntity implements IDocument {
     }
     public set setCategory(value) {
         this.category=value;
-    }
+    }*/
 }
 
 module.exports={

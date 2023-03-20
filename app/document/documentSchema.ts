@@ -7,4 +7,4 @@ export const documentSchema = new Schema({
     category:Number,
 });
 
-module.exports = mongoose.model('documents', documentSchema);
+module.exports.documents = mongoose.model('documents', documentSchema);
