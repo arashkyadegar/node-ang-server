@@ -1,31 +1,34 @@
-import { IComment } from "../comment/commentEntity";
-import { IDocument } from "../document/documentEntity";
+import { CommentEntity, IComment } from "../comment/commentEntity";
+import { DocumentEntity, IDocument } from "../document/documentEntity";
 
 export interface IPost {
     id:number;
     title:string;
     text:string;
-    rate:number;
+    /*rate:number;
     user:number;
     img:string;
     date:string;
     isVisible:boolean;
-    comments:Array<IComment>;
-    documents:Array<IDocument>;
+    comments:Array<CommentEntity>;
+    documents:Array<DocumentEntity>;*/
 }
 
 export class PostEntity implements IPost {
     id: number=0;
-    title: string="";
-    text: string="";
-    rate: number=0;
+    title: string;
+    text: string;
+   /* rate: number=0;
     user: number=0;
     img: string="";
     date:string="";
     isVisible: boolean=false;
-    comments: IComment[]=[];
-    documents: IDocument[]=[];
-
+    comments:new CommentEntity[]=[];
+    documents: IDocument[]=[];*/
+constructor(ti:string,te:string){
+    this.text=te;
+    this.title=ti;
+}
     public get getId():number{
         return this.id;
     }
@@ -46,7 +49,7 @@ export class PostEntity implements IPost {
         this.text=value;
     }
 
-    public get getRate():number{
+  /*  public get getRate():number{
         return this.rate;
     }
     public set setRate(value) {
@@ -94,7 +97,7 @@ export class PostEntity implements IPost {
     }
     public set setDocuments(value) {
         this.documents=value;
-    }
+    }*/
 }
 
 module.exports={

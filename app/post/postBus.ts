@@ -21,9 +21,7 @@ export class PostBusConc implements PostBus {
  
      find(): PostEntity[] {
          let x=new Array<PostEntity>();
-             x.push(new PostEntity());
-             x.push(new PostEntity());
-             x.push(new PostEntity());
+
          return x;
      }
  

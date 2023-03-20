@@ -1,23 +1,26 @@
 import express from 'express';
 
 export const PostRouter=express.Router();
-            PostRouter.get("/",async function(req,res){
-                res.send({name:'posts get  getList'});
+
+
+            PostRouter.get("/:pid", function(req,res){
+      
+
+                res.send(req.params);
+            });
+
+            PostRouter.post("/", function(req,res){
+                res.send('cccc');
 
             });
 
-            PostRouter.post("/",async function(req,res){
-                res.send({name:'posts post create a blog'});
+            PostRouter.put("/", function(req,res){
+                res.send('vvvv');
 
             });
 
-            PostRouter.put("/",async function(req,res){
-                res.send({name:'posts put update a blog'});
-
-            });
-
-            PostRouter.delete("/",async function(req,res){
-                res.send({name:'posts delete delete a blog'});
+            PostRouter.delete("/:pid", function(req,res){
+                res.send('ddddd');
 
             });
     

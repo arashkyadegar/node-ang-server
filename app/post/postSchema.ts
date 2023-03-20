@@ -6,13 +6,13 @@ import { documentSchema } from '../document/documentSchema';
 export const postSchema = new Schema({
     title: String,
     text: String,
-    rate: Number,
+  /*  rate: Number,
     user: Number,
     img: String,
     date:String,
     isVisible: Boolean,
     comments: [commentSchema],
-    documents: [documentSchema]
+    documents: [documentSchema]*/
 });
 
-module.exports = mongoose.model('posts', postSchema);
+module.exports.posts = mongoose.model('posts', postSchema);
