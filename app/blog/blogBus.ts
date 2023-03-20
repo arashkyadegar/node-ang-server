@@ -3,6 +3,8 @@ import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import { PostBusConc } from '../post/postBus';
 import { BlogDalConc } from './blogDal';
+import {PostEntity} from '../post/postEntity';
+
 export interface BlogBus {
      insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<BlogEntity[]>; // returns Array of objects.
@@ -12,6 +14,12 @@ export interface BlogBus {
 }
 
 export class BlogBusConc implements BlogBus {
+    
+ async findOneAndAddPost(tmp_bid: string,post:PostEntity): Promise<boolean> {
+    const db=new BlogDalConc();
+    const rslt=await db.findOneAndAddPost(tmp_bid,post);
+    return rslt;
+  }
    async insertOne( blog: BlogEntity): Promise<boolean> {
                     const db=new BlogDalConc();
                     //const p=await validate(blog);

@@ -1,4 +1,5 @@
 import {IBlog,BlogEntity} from './blogEntity';
+import {PostEntity} from '../post/postEntity';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import mongoose from 'mongoose';
@@ -17,6 +18,17 @@ export class BlogDalConc implements BlogDal {
         const rslt=await blog.save();
         return rslt;
     }
+
+    async findOneAndAddPost(id: string,p:PostEntity):Promise<boolean> {
+      const schema_blog = require('../blog/blogSchema');
+      const schema_post = require('../post/postSchema');
+
+      const post= schema_blog(p);
+        const blog =  schema_blog.findByIdAndUpdate(id, { posts: post },{upsert:false})
+        const rslt=await blog.save();
+        return rslt;
+    }
+
   async  find(): Promise<BlogEntity[]>{
         const schema = require('../blog/blogSchema');
         let rslt= await schema.find();

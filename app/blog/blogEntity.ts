@@ -12,7 +12,7 @@ import {
     min,
     MAX,
   } from 'class-validator';
-import { IPost } from '../post/postEntity';
+import { IPost, PostEntity } from '../post/postEntity';
 import { IUser, UserEntity } from '../user/userEntity';
 
   export interface IBlog {
@@ -30,7 +30,7 @@ export class BlogEntity implements IBlog {
     body: string="";
     rate: number=0;
     author=new UserEntity();
-    posts:Array<IPost>=[];
+    posts:Array<PostEntity>=[];
     public get getId():number{
         return this.id;
     }
@@ -42,7 +42,7 @@ export class BlogEntity implements IBlog {
         return this.posts;
     }
     public set setPosts(value) {
-        this.posts=value;
+        this.posts.push(value);
     }
 
     public get getTitle():string{
@@ -71,6 +71,9 @@ export class BlogEntity implements IBlog {
     }
     public set setAuthor(value) {
         this.author=value;
+    }
+    addToPost(p:PostEntity):void {
+        this.posts.push(p);
     }
 }
 
