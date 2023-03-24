@@ -12,7 +12,4 @@ module.exports = function(app){
     app.use('/home',HomeRouter);
     app.use('/blogs',BlogRouter);
     app.use('/posts',PostRouter);
-
-
-    
 };
