@@ -3,10 +3,11 @@ import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import { PostBusConc } from '../post/postBus';
 import { BlogDalConc } from './blogDal';
-import {PostEntity} from '../post/postEntity';
+import {UserEntity} from '../user/userEntity';
+import { PostEntity } from '../post/postEntity';
 
 export interface BlogBus {
-     insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
+    insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(id:number,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
@@ -14,10 +15,15 @@ export interface BlogBus {
 }
 
 export class BlogBusConc implements BlogBus {
-    
- async findOneAndAddPost(tmp_bid: string,post:PostEntity): Promise<boolean> {
+  async findOneAndAddPost(tmp_bid, posts:Array<PostEntity>) {
     const db=new BlogDalConc();
-    const rslt=await db.findOneAndAddPost(tmp_bid,post);
+    const rslt=await db.findOneAndUpdatePost(tmp_bid,posts);
+    return rslt;
+  }
+    
+ async findOneAndAddAuthore(tmp_bid: string,u:UserEntity): Promise<boolean> {
+    const db=new BlogDalConc();
+    const rslt=await db.findOneAndUpdateAuthor(tmp_bid,u);
     return rslt;
   }
    async insertOne( blog: BlogEntity): Promise<boolean> {

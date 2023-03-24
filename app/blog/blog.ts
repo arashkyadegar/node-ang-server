@@ -10,17 +10,33 @@ import { DocumentEntity } from '../document/documentEntity';
 export const BlogRouter=express.Router();
 
 
-        BlogRouter.post("/:bid/posts/:pid",async function(req,res){
-          /*const bus=new BlogBusConc();
-        
-            post.setText="p1";
-            post.setTitle="p2";
-          let tmp_pid=req.params.bid; //postid
-          let tmp_bid=req.params.bid; //blogid
-          const rslt =await bus.findOneAndAddPost(tmp_bid,post);
-          res.send({rslt});*/
+        BlogRouter.post("/:bid/author/",async function(req,res){
+          if(!parseInt(req.params.bid)) {
+            res.statusCode=400;
+            res.send({'failed : ':' bad params'});    
+          }else{
+          
+            const bus=new BlogBusConc();
+            const tmp_author=<UserEntity> req.body.author;
+            const tmp_bid=req.params.bid.trim();
+          //  tmp_author.name=req.body.name;
+            const rslt =await bus.findOneAndAddAuthore(tmp_bid,tmp_author);
+            res.send({rslt});
+          }
         });
 
+        
+        BlogRouter.post("/:bid/posts/:pid",async function(req,res){
+          if(!parseInt(req.params.bid) || !parseInt(req.params.pid)) {
+            res.statusCode=400;
+            res.send({'failed : ':' bad params'});    
+          }else{
+            const bus=new BlogBusConc();            
+            let tmp_posts=<Array<PostEntity>> req.body.posts;
+            const rslt =await bus.findOneAndAddPost("641893a77054496c0350afb2",tmp_posts);
+            res.send({rslt});
+          }
+        });
 
 
        BlogRouter.get("/",async function(req,res){
@@ -31,6 +47,7 @@ export const BlogRouter=express.Router();
         });
 
         BlogRouter.get("/:bid",async function(req,res){
+          //should add validation for _id throw new BSONError
           const bus=new BlogBusConc();
             let rslt=new BlogEntity();
             let tmp_id=req.params.bid;
@@ -54,10 +71,13 @@ export const BlogRouter=express.Router();
             tmp_blog.setRate=req.body.rate;
             tmp_blog.setAuthor=author;
             tmp_blog.setPosts=req.body.posts;
-
+            
 
                   req.body.posts.forEach(element => {
-                    tmp_blog.addToPost(new PostEntity(element.title,element.text));
+                    tmp_blog.addToPost(
+                      new PostEntity(element.title,element.text,element.rate,
+                        element.img,element.date,element.isVisible)
+                    )
                   });
 
             //tmp_blog.setPosts=post;
