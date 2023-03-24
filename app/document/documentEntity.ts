@@ -2,15 +2,15 @@ import { IPost, PostEntity } from "../post/postEntity";
 
 export interface IDocument {
     title:string;
-   /* url:string;
-    category:number;*/
+    url:string;
+    category:number;
 
 }
 export class DocumentEntity implements IDocument {
     id: number=0;
     title: string="";
-    /*url: string="";
-    category: number=0;*/
+    url: string="";
+    category: number=0;
 
 
     public get getId():number{
