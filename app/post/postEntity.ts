@@ -5,29 +5,33 @@ export interface IPost {
     id:number;
     title:string;
     text:string;
-    /*rate:number;
-    user:number;
+    rate:number;
     img:string;
     date:string;
     isVisible:boolean;
+    documents:Array<DocumentEntity>;
     comments:Array<CommentEntity>;
-    documents:Array<DocumentEntity>;*/
+    /*user:number;*/
 }
 
 export class PostEntity implements IPost {
     id: number=0;
     title: string;
     text: string;
-   /* rate: number=0;
-    user: number=0;
-    img: string="";
-    date:string="";
-    isVisible: boolean=false;
-    comments:new CommentEntity[]=[];
-    documents: IDocument[]=[];*/
-constructor(ti:string,te:string){
+   rate: number=0;
+   img: string="";
+   date:string="";
+   isVisible: boolean=false;
+   documents: Array<DocumentEntity>=[];
+   comments:Array<CommentEntity>=[];
+   /*  user: number=0;*/
+constructor(ti:string,te:string,r:number,img:string,date:string,isVisible:boolean){
     this.text=te;
     this.title=ti;
+    this.rate=r;
+    this.img=img;
+    this.date=date;
+    this.isVisible=isVisible;
 }
     public get getId():number{
         return this.id;
@@ -49,15 +53,17 @@ constructor(ti:string,te:string){
         this.text=value;
     }
 
-  /*  public get getRate():number{
+    public get getRate():number{
         return this.rate;
     }
     public set setRate(value) {
         this.rate=value;
     }
+    addToPost(d:DocumentEntity):void {
+        this.documents.push(d);
+    }
 
-
-    public get getUser():number{
+  /*  public get getUser():number{
         return this.user;
     }
     public set setUser(value) {
