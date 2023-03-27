@@ -14,7 +14,7 @@ module.exports=function(){
 
         db.once('open', function() {
           console.log("connected to mongoDb successfully..!");
-
+          
           resolve(db);
         })
     });
