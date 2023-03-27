@@ -19,6 +19,17 @@ export class BlogBusConc implements BlogBus {
     this.db=db;
   }
 
+async test(bid:string,pid:string,p:PostEntity):Promise<boolean>{
+  var _= require('lodash');
+  let blog=await this.findOne(bid);
+
+  var ObjectId =new mongoose.Types.ObjectId(pid);
+  var index = _.findIndex(blog.posts, {"_id": ObjectId});
+  blog.posts.splice(index, 1,p);
+  const rslt=this.db.updateOne(blog);
+  return rslt;
+
+}
   async findOneAndAddPost(tmp_bid:string, posts:Array<PostEntity>):Promise<boolean> {
     const rslt=await this.db.findOneAndUpdatePost(tmp_bid,posts);
     return rslt;

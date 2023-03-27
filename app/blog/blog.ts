@@ -20,7 +20,18 @@ export const BlogRouter=express.Router();
           }
         });
 
-        
+        BlogRouter.put("/:bid/posts/:pid",async function(req,res){
+          if(!parseInt(req.params.bid) || !parseInt(req.params.pid)) {
+            res.statusCode=400;
+            res.send({'failed : ':' bad params'});    
+          }else{  
+            let pid=req.params.pid;
+            let bid=req.params.bid;
+            const tmp_post=<PostEntity> req.body.posts;
+            const rslt =await blog_bus.test(bid,pid,tmp_post);
+            res.send(rslt);
+          }
+        });
         BlogRouter.post("/:bid/posts/:pid",async function(req,res){
           if(!parseInt(req.params.bid) || !parseInt(req.params.pid)) {
             res.statusCode=400;

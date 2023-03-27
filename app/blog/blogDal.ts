@@ -1,5 +1,6 @@
 import {IBlog,BlogEntity} from './blogEntity';
 import {PostEntity} from '../post/postEntity';
+import {mongUtility} from '../utility/mongooseUtility';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import mongoose from 'mongoose';
@@ -9,7 +10,7 @@ export interface BlogDal {
     insertOne(b:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
-    updateOne(id:number,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
+    updateOne(b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity> ; //returns true if delete is successful othewise false.
     findOneAndUpdatePost(bid: string,posts:Array<PostEntity>):Promise<boolean>;
     findOneAndUpdateAuthor(bid: string,u:UserEntity):Promise<boolean>;
@@ -24,8 +25,8 @@ export interface BlogDal {
     }
 
     async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
-        
       throw new Error('Method not implemented.');
+      
     }
 
     async findOneAndUpdatePost(bid: string,posts:Array<PostEntity>):Promise<boolean> {
@@ -51,19 +52,22 @@ export interface BlogDal {
     }
 
     async  findOne(id: string):  Promise<BlogEntity> {
+          var ObjectId =mongUtility.getObjectId(id);
           const schema = require('../blog/blogSchema');
-          var ObjectId =new mongoose.Types.ObjectId(id);
           let rslt= await schema.find({'_id':ObjectId});
           return rslt;
     }
 
-    updateOne(id: number, b: BlogEntity): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    async updateOne(b: BlogEntity): Promise<boolean> {
+      const schema = require('../blog/blogSchema');
+      const blogDocument= schema(b);
+      const rslt=await blogDocument.save();
+      return rslt;
     }
 
     async  deleteOne(id: string): Promise<BlogEntity>  {
       const schema = require('../blog/blogSchema');
-      var ObjectId =new mongoose.Types.ObjectId(id);
+           var ObjectId =mongUtility.getObjectId(id);
       let rslt= await schema.findOneAndRemove({'_id':ObjectId});
       return rslt;
     }
