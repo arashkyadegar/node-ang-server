@@ -15,5 +15,5 @@ export const postSchema = new Schema({
      /* user: Number,
 ,*/
 });
-
+//module.exports = mongoose.model('posts', postSchema);
 module.exports.posts = mongoose.model('posts', postSchema);
