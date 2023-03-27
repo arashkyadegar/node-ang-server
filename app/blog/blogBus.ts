@@ -1,11 +1,10 @@
 import {IBlog,BlogEntity} from './blogEntity';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
-import { PostBusConc } from '../post/postBus';
-import { BlogDalConc } from './blogDal';
+import { BlogDalConc,BlogDal } from './blogDal';
 import {UserEntity} from '../user/userEntity';
 import { PostEntity } from '../post/postEntity';
-
+import mongoose from 'mongoose';
 export interface BlogBus {
     insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<BlogEntity[]>; // returns Array of objects.
@@ -15,41 +14,44 @@ export interface BlogBus {
 }
 
 export class BlogBusConc implements BlogBus {
-  async findOneAndAddPost(tmp_bid, posts:Array<PostEntity>) {
-    const db=new BlogDalConc();
-    const rslt=await db.findOneAndUpdatePost(tmp_bid,posts);
+  private db:BlogDal;
+  constructor(db:BlogDal){
+    this.db=db;
+  }
+
+  async findOneAndAddPost(tmp_bid:string, posts:Array<PostEntity>):Promise<boolean> {
+    const rslt=await this.db.findOneAndUpdatePost(tmp_bid,posts);
     return rslt;
   }
-    
- async findOneAndAddAuthore(tmp_bid: string,u:UserEntity): Promise<boolean> {
-    const db=new BlogDalConc();
-    const rslt=await db.findOneAndUpdateAuthor(tmp_bid,u);
+  async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
+    var ObjectId =new mongoose.Types.ObjectId(tmp_pid);
+    var _= require('lodash');
+    const  posts=await this.findPosts(tmp_bid);
+    const rslt=_.find(posts,{'_id':ObjectId})
+  return rslt;
+  }
+    async findPosts(tmp_bid:string):Promise<PostEntity[]>{
+      const blogs=await this.findOne(tmp_bid);
+      return blogs.posts;
+    }
+ async findOneAndUpdateAuthor(tmp_bid: string,u:UserEntity): Promise<boolean> {
+    const rslt=await this.db.findOneAndUpdateAuthor(tmp_bid,u);
     return rslt;
   }
    async insertOne( blog: BlogEntity): Promise<boolean> {
-                    const db=new BlogDalConc();
-                    //const p=await validate(blog);
-                    const rslt=await db.insertOne(blog);
+                    const rslt=await this.db.insertOne(blog);
                     return rslt;
-              /*      if(p.length >0 ){
-                        return false;
-                    }else{
-                
-                        return true;
-                    }*/
     }
 
   async  find(): Promise<BlogEntity[]> {
-        const db=new BlogDalConc();
-        const rslt=await db.find();
+        const rslt=await this.db.find();
         return rslt;
     }
 
   async   findOne(id: string): Promise<BlogEntity> {
-        const db=new BlogDalConc();
-        //const p=await validate(blog);
-        const rslt=await db.findOne(id);
-        return rslt;
+        var _array = require('lodash/array');
+        const rslt=await this.db.findOne(id);
+        return  _array.first(rslt);
     }
 
     async updateOne(id: number, blog: BlogEntity): Promise<boolean> {
