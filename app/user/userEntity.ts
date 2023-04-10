@@ -1,17 +1,19 @@
+import mongoose from "mongoose";
+
 export interface IUser {
-    id:number;
+     _id:mongoose.Types.ObjectId;
     name:string;
 }
 export class UserEntity implements IUser {
-    id: number=0;
+    _id!:mongoose.Types.ObjectId;
     name: string="";
 
 
-    public get getId():number{
-        return this.id;
+    public get getId():mongoose.Types.ObjectId{
+        return this._id;
     }
     public set setId(value) {
-        this.id=value;
+        this._id=value;
     }
 
     public get getName():string{

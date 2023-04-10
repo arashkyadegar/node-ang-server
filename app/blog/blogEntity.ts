@@ -12,38 +12,43 @@ import {
     min,
     MAX,
   } from 'class-validator';
+  import mongoose from 'mongoose';
 import { IPost, PostEntity } from '../post/postEntity';
 import { IUser, UserEntity } from '../user/userEntity';
 
   export interface IBlog {
-        id:number;
+         _id:mongoose.Types.ObjectId;
         title:string;
         author:IUser;
-        body:string;
-        rate:number;
-        posts:Array<IPost>;
+        // body:string;
+        // rate:number;
+        // posts:Array<IPost>;
   }
 
 export class BlogEntity implements IBlog {
-    id: number=0;
+    _id!: mongoose.Types.ObjectId;
     title: string="";
-    body: string="";
-    rate: number=0;
+    // body: string="";
+    // rate: number=0;
     author=new UserEntity();
-    posts:Array<PostEntity>=[];
-    public get getId():number{
-        return this.id;
+    // posts:Array<PostEntity>=[];
+
+    // constructor(){
+    // this.author=new UserEntity();
+    // }
+    public get getId():mongoose.Types.ObjectId{
+        return this._id;
     }
     public set setId(value) {
-        this.id=value;
+        this._id=value;
     }
 
-    public get getPosts():Array<IPost>{
-        return this.posts;
-    }
-    public set setPosts(value) {
-        this.posts.push(value);
-    }
+    // public get getPosts():Array<IPost>{
+    //     return this.posts;
+    // }
+    // public set setPosts(value) {
+    //     this.posts.push(value);
+    // }
 
     public get getTitle():string{
         return this.title;
@@ -52,19 +57,19 @@ export class BlogEntity implements IBlog {
         this.title=value;
     }
 
-    public get getBody():string{
-        return this.body;
-    }
-    public set setBody(value) {
-        this.body=value;
-    }
+    // public get getBody():string{
+    //     return this.body;
+    // }
+    // public set setBody(value) {
+    //     this.body=value;
+    // }
 
-    public get getRate():number{
-        return this.rate;
-    }
-    public set setRate(value) {
-        this.rate=value;
-    }
+    // public get getRate():number{
+    //     return this.rate;
+    // }
+    // public set setRate(value) {
+    //     this.rate=value;
+    // }
 
     public get getAuthor():IUser{
         return this.author;
@@ -72,9 +77,9 @@ export class BlogEntity implements IBlog {
     public set setAuthor(value) {
         this.author=value;
     }
-    addToPost(p:PostEntity):void {
-        this.posts.push(p);
-    }
+    // addToPost(p:PostEntity):void {
+    //     this.posts.push(p);
+    // }
 }
 
 

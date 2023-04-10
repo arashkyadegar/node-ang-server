@@ -12,16 +12,19 @@ export interface BlogDal {
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity> ; //returns true if delete is successful othewise false.
-    findOneAndUpdatePost(bid: string,posts:Array<PostEntity>):Promise<boolean>;
+    findOneAndAddNewPosts(bid: string,posts:Array<PostEntity>):Promise<boolean>;
     findOneAndUpdateAuthor(bid: string,u:UserEntity):Promise<boolean>;
 }
 
     export class BlogDalConc implements BlogDal {
      async insertOne(b: BlogEntity): Promise<boolean> {
         const schema = require('../blog/blogSchema');
+
         const blog= schema(b);
+        console.log(blog);
         const rslt=await blog.save();
-        return rslt;
+
+        return true;
     }
 
     async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
@@ -29,7 +32,7 @@ export interface BlogDal {
       
     }
 
-    async findOneAndUpdatePost(bid: string,posts:Array<PostEntity>):Promise<boolean> {
+    async findOneAndAddNewPosts(bid: string,posts:Array<PostEntity>):Promise<boolean> {
       const Character = require('../blog/blogSchema');
       var ObjectId =new mongoose.Types.ObjectId(bid);
       const filter = {'_id':bid}

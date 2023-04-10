@@ -8,6 +8,13 @@ dotenv.config();
 const port = process.env.PORT;
 
 var app = express();
+//allow to call from local angular
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+});
+
 app.use(express.json());
 require('./app/routes/index')(app);
 

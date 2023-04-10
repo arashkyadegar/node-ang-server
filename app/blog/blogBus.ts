@@ -19,37 +19,38 @@ export class BlogBusConc implements BlogBus {
     this.db=db;
   }
 
-async test(bid:string,pid:string,p:PostEntity):Promise<boolean>{
-  var _= require('lodash');
-  let blog=await this.findOne(bid);
+// async test(bid:string,pid:string,p:PostEntity):Promise<boolean>{
+//   var _= require('lodash');
+//   let blog=await this.findOne(bid);
 
-  var ObjectId =new mongoose.Types.ObjectId(pid);
-  var index = _.findIndex(blog.posts, {"_id": ObjectId});
-  blog.posts.splice(index, 1,p);
-  const rslt=this.db.updateOne(blog);
-  return rslt;
+//   var ObjectId =new mongoose.Types.ObjectId(pid);
+//   var index = _.findIndex(blog.posts, {"_id": ObjectId});
+//   blog.posts.splice(index, 1,p);
+//   const rslt=this.db.updateOne(blog);
+//   return rslt;
 
-}
-  async findOneAndAddPost(tmp_bid:string, posts:Array<PostEntity>):Promise<boolean> {
-    const rslt=await this.db.findOneAndUpdatePost(tmp_bid,posts);
+// }
+  async findOneAndAddNewPosts(tmp_bid:string, posts:Array<PostEntity>):Promise<boolean> {
+    const rslt=await this.db.findOneAndAddNewPosts(tmp_bid,posts);
     return rslt;
   }
-  async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
-    var ObjectId =new mongoose.Types.ObjectId(tmp_pid);
-    var _= require('lodash');
-    const  posts=await this.findPosts(tmp_bid);
-    const rslt=_.find(posts,{'_id':ObjectId})
-  return rslt;
-  }
-    async findPosts(tmp_bid:string):Promise<PostEntity[]>{
-      const blogs=await this.findOne(tmp_bid);
-      return blogs.posts;
-    }
+  // async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
+  //   var ObjectId =new mongoose.Types.ObjectId(tmp_pid);
+  //   var _= require('lodash');
+  //   const  posts=await this.findPosts(tmp_bid);
+  //   const rslt=_.find(posts,{'_id':ObjectId})
+  // return rslt;
+  // }
+    // async findPosts(tmp_bid:string):Promise<PostEntity[]>{
+    //   const blogs=await this.findOne(tmp_bid);
+    //   return blogs.posts;
+    // }
  async findOneAndUpdateAuthor(tmp_bid: string,u:UserEntity): Promise<boolean> {
     const rslt=await this.db.findOneAndUpdateAuthor(tmp_bid,u);
     return rslt;
   }
    async insertOne( blog: BlogEntity): Promise<boolean> {
+                    
                     const rslt=await this.db.insertOne(blog);
                     return rslt;
     }
