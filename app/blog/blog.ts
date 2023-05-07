@@ -44,16 +44,16 @@ export const BlogRouter=express.Router();
           }
         });
 
-        // BlogRouter.get("/:bid/posts/",async function(req,res){
-        //   if(!parseInt(req.params.bid)) {
-        //     res.statusCode=400;
-        //     res.send({'failed : ':' bad params'});    
-        //   }else{  
-        //     const tmp_bid=req.params.bid;
-        //     const rslt =await blog_bus.findPosts(tmp_bid);
-        //     res.send(rslt);
-        //   }
-        // });
+        BlogRouter.get("/:bid/posts/",async function(req,res){
+          if(!parseInt(req.params.bid)) {
+            res.statusCode=400;
+            res.send({'failed : ':' bad params'});    
+          }else{  
+            const tmp_bid=req.params.bid;
+            const rslt =await blog_bus.findPosts(tmp_bid);
+            res.send(rslt);
+          }
+        });
 
         // BlogRouter.get("/:bid/posts/:pid",async function(req,res){
         //   if(!parseInt(req.params.bid) || !parseInt(req.params.pid)) {
@@ -79,6 +79,7 @@ export const BlogRouter=express.Router();
             let rslt=new BlogEntity();
             let tmp_id=req.params.bid;
             rslt =await blog_bus.findOne(tmp_id);
+            console.log(rslt)
             res.statusCode=200;
             res.send(rslt);
         });
@@ -87,7 +88,9 @@ export const BlogRouter=express.Router();
            const tmp_blog=<BlogEntity> req.body;
            tmp_blog._id =new mongoose.Types.ObjectId();
            tmp_blog.author._id=new mongoose.Types.ObjectId();
-            let rslt= await blog_bus.insertOne(tmp_blog);
+           tmp_blog.date=new Date();
+           tmp_blog.rate=1;
+           let rslt= await blog_bus.insertOne(tmp_blog);
           //  console.log(rslt);
             if(!rslt){
                 res.statusCode=400;
@@ -100,13 +103,14 @@ export const BlogRouter=express.Router();
         });
 
         BlogRouter.put("/:bid",async function(req,res){
-          let tmp_id=0;
+          
               // check if id route param is digit or not
               if(!parseInt(req.params.bid)) {
                 res.statusCode=400;
                 res.send({'failed : ':' bad params'});                  
               }else{
-                      tmp_id=parseInt(req.params.bid);
+                      //tmp_id=parseInt(req.params.bid);
+                     let tmp_id=req.params.bid;
                       const tmp_blog=<BlogEntity> req.body;
                         
                       let rslt= await blog_bus.updateOne(tmp_id,tmp_blog);

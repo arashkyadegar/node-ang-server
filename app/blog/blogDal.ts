@@ -5,12 +5,13 @@ import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import mongoose from 'mongoose';
 import { UserEntity } from '../user/userEntity';
+import { MongoDb } from '../config/mongodb';
 export interface BlogDal {
     findPostsById(bid: string,pid:string):Promise<PostEntity>;
     insertOne(b:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
-    updateOne(b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
+    updateOne(id:string,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity> ; //returns true if delete is successful othewise false.
     findOneAndAddNewPosts(bid: string,posts:Array<PostEntity>):Promise<boolean>;
     findOneAndUpdateAuthor(bid: string,u:UserEntity):Promise<boolean>;
@@ -18,13 +19,14 @@ export interface BlogDal {
 
     export class BlogDalConc implements BlogDal {
      async insertOne(b: BlogEntity): Promise<boolean> {
-        const schema = require('../blog/blogSchema');
-
-        const blog= schema(b);
-        console.log(blog);
-        const rslt=await blog.save();
-
-        return true;
+      const mongoDb =new MongoDb();
+      let rslt:any;
+            const client=mongoDb.dbconnect();
+                await client.then(async (db:any) => {
+                  rslt=await db.collection('blogs').insertOne(b);
+                })
+          mongoDb.dbclose();
+          return rslt;
     }
 
     async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
@@ -49,30 +51,61 @@ export interface BlogDal {
     }
 
     async  find(): Promise<BlogEntity[]>{
-          const schema = require('../blog/blogSchema');
-          let rslt= await schema.find();
+      const mongoDb =new MongoDb();
+      let rslt:any;
+            const client=mongoDb.dbconnect();
+                await client.then(async (db:any) => {
+                  rslt=await db.collection('blogs').findOne();
+                })
+          mongoDb.dbclose();
           return rslt;
+
     }
 
     async  findOne(id: string):  Promise<BlogEntity> {
-          var ObjectId =mongUtility.getObjectId(id);
-          const schema = require('../blog/blogSchema');
-          let rslt= await schema.find({'_id':ObjectId});
-          return rslt;
+           let ObjectId =mongUtility.getObjectId(id);
+          // const schema = require('../blog/blogSchema');
+          // let rslt= await schema.find({'_id':ObjectId});
+          // return rslt;
+
+          const mongoDb =new MongoDb();
+          let rslt:any;
+                const client=mongoDb.dbconnect();
+                    await client.then(async (db:any) => {
+                      rslt=await db.collection('blogs').findOne({'_id':ObjectId});
+                    })
+              mongoDb.dbclose();
+              return rslt;
+    
     }
 
-    async updateOne(b: BlogEntity): Promise<boolean> {
-      const schema = require('../blog/blogSchema');
-      const blogDocument= schema(b);
-      const rslt=await blogDocument.save();
-      return rslt;
+    async updateOne(id :string ,b: BlogEntity): Promise<boolean> {
+      // const schema = require('../blog/blogSchema');
+      // const blogDocument= schema(b);
+      // const rslt=await blogDocument.save();
+      // return rslt;
+      var ObjectId =mongUtility.getObjectId(id);
+      const mongoDb =new MongoDb();
+      let rslt:any;
+            const client=mongoDb.dbconnect();
+                await client.then(async (db:any) => {
+                  rslt=await db.collection('blogs').replaceOne({'_id':ObjectId}, { $set: { b }} );
+                })
+          mongoDb.dbclose();
+          return rslt;
+     // db.posts.updateOne( { title: "Post Title 1" }, { $set: { likes: 2 } } ) 
     }
 
     async  deleteOne(id: string): Promise<BlogEntity>  {
-      const schema = require('../blog/blogSchema');
-           var ObjectId =mongUtility.getObjectId(id);
-      let rslt= await schema.findOneAndRemove({'_id':ObjectId});
-      return rslt;
+      var ObjectId =mongUtility.getObjectId(id);
+      const mongoDb =new MongoDb();
+      let rslt:any;
+            const client=mongoDb.dbconnect();
+                await client.then(async (db:any) => {
+                  rslt=await db.collection('blogs').deleteOne({'_id':ObjectId});
+                })
+          mongoDb.dbclose();
+          return rslt;
     }
 
 }

@@ -9,7 +9,7 @@ export interface BlogBus {
     insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
-    updateOne(id:number,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
+    updateOne(id:string,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity>; //returns true if delete is successful othewise false.
 }
 
@@ -41,10 +41,10 @@ export class BlogBusConc implements BlogBus {
   //   const rslt=_.find(posts,{'_id':ObjectId})
   // return rslt;
   // }
-    // async findPosts(tmp_bid:string):Promise<PostEntity[]>{
-    //   const blogs=await this.findOne(tmp_bid);
-    //   return blogs.posts;
-    // }
+    async findPosts(tmp_bid:string):Promise<PostEntity[]>{
+      const blogs=await this.findOne(tmp_bid);
+      return blogs.posts;
+    }
  async findOneAndUpdateAuthor(tmp_bid: string,u:UserEntity): Promise<boolean> {
     const rslt=await this.db.findOneAndUpdateAuthor(tmp_bid,u);
     return rslt;
@@ -60,19 +60,26 @@ export class BlogBusConc implements BlogBus {
         return rslt;
     }
 
-  async   findOne(id: string): Promise<BlogEntity> {
+  async  findOne(id: string): Promise<BlogEntity> {
         var _array = require('lodash/array');
         const rslt=await this.db.findOne(id);
-        return  _array.first(rslt);
+        return  rslt;
     }
 
-    async updateOne(id: number, blog: BlogEntity): Promise<boolean> {
+    async updateOne(id: string, blog: BlogEntity): Promise<boolean> {
         let validation_rslt=false;
+        const db=new BlogDalConc();
         // check class validation
             const p=await validate(blog);
-            if(p.length >0 )
-                return false;
-                return true;
+            console.log(p);
+            if(p.length >0 ){
+              return false;
+            }else{
+              const rslt=await db.updateOne(id,blog);
+              return true;
+            }
+       
+         
     }
    async deleteOne(id: string): Promise<BlogEntity> {
         const db=new BlogDalConc();
