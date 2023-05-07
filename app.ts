@@ -2,8 +2,12 @@
 import dotenv from 'dotenv';
 var http=require('http');
 var express = require('express');
+const fileUpload = require('express-fileupload');
 //import  {router} from './app/routes';
-require('./app/config/db')();
+//require('./app/config/db')();
+
+
+
 dotenv.config();
 const port = process.env.PORT;
 
@@ -16,6 +20,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(express.json());
+app.use(fileUpload());
 require('./app/routes/index')(app);
 
 const server =http.createServer(app).listen(port, () => {
