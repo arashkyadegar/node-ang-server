@@ -1,7 +1,10 @@
 import express from 'express';
 import { PostDalConc } from './postDal';
+import {MongoDb} from '../config/mongodb'
 import { PostEntity } from './postEntity';
-
+import assert from 'assert';
+const { MongoClient } = require('mongodb');
+import { takeWhile, Observable, of, map, fromEvent, take, first } from 'rxjs';
 export const PostRouter=express.Router();
 
             PostRouter.get("/:pid",async function(req,res){
@@ -13,9 +16,27 @@ export const PostRouter=express.Router();
                 res.send(rslt);
             });
 
-            PostRouter.post("/", function(req,res){
-                res.send('cccc');
-
+            PostRouter.post("/",async function(req,res){
+            //     const MongoClient = require('mongodb').MongoClient;
+            //    await dbconnect();
+            //     async function dbconnect() {
+            //     console.log("This will print.");
+            //     const client = await MongoClient.connect(
+            //         'mongodb://127.0.0.1:27017');
+            //         const x =client.db('blogdb').collection('blogs');
+            //         const first = await x.findOne();
+            //         //console.log(first);
+            //         res.send(first);
+            //         client.close(); //call this when you are done.
+         
+            //     };
+            const mongoDb =new MongoDb();
+            const client=mongoDb.dbconnect();
+              await client.then(async (db:any) => {
+                    const first =await db.collection('blogs').findOne();
+                    res.send(first);
+                })
+             mongoDb.dbclose();
             });
 
             PostRouter.put("/", function(req,res){
@@ -23,8 +44,12 @@ export const PostRouter=express.Router();
 
             });
 
-            PostRouter.delete("/:pid", function(req,res){
-                res.send('ddddd');
+            PostRouter.delete("/:pid",async function(req,res){
+                const bus=new PostDalConc();
+                let tmp_id=req.params.pid;
+                bus.deleteOne(tmp_id);
+                res.statusCode=200;
+                res.send('ok');
 
             });
     
