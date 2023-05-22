@@ -71,7 +71,6 @@ export const BlogRouter=express.Router();
           let rslt = await blog_bus.find();
           res.statusCode=200;
           res.send(rslt);
-          return("ok");
         });
 
         BlogRouter.get("/:bid",async function(req,res){
@@ -79,7 +78,6 @@ export const BlogRouter=express.Router();
             let rslt=new BlogEntity();
             let tmp_id=req.params.bid;
             rslt =await blog_bus.findOne(tmp_id);
-            console.log(rslt)
             res.statusCode=200;
             res.send(rslt);
         });

@@ -7,7 +7,7 @@ import { PostEntity } from '../post/postEntity';
 import mongoose from 'mongoose';
 export interface BlogBus {
     insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
-    find():Promise<BlogEntity[]>; // returns Array of objects.
+    find(): Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(id:string,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity>; //returns true if delete is successful othewise false.
@@ -50,18 +50,17 @@ export class BlogBusConc implements BlogBus {
     return rslt;
   }
    async insertOne( blog: BlogEntity): Promise<boolean> {
-                    
                     const rslt=await this.db.insertOne(blog);
                     return rslt;
     }
 
-  async  find(): Promise<BlogEntity[]> {
-        const rslt=await this.db.find();
+   async find(): Promise<BlogEntity[]>{
+        const rslt = await this.db.find();
         return rslt;
     }
 
   async  findOne(id: string): Promise<BlogEntity> {
-        var _array = require('lodash/array');
+       // var _array = require('lodash/array');
         const rslt=await this.db.findOne(id);
         return  rslt;
     }
