@@ -30,7 +30,7 @@ export const PostRouter=express.Router();
             //         client.close(); //call this when you are done.
          
             //     };
-            const client =new MongoDb();
+           // const client =new MongoDb();
             //   await client.then(async (db:any) => {
             //         const first =await db.collection('blogs').findOne();
             //         res.send(first);

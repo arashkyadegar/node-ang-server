@@ -21,16 +21,21 @@ export interface BlogDal {
 
     export class BlogDalConc implements BlogDal {
     async  find(): Promise<BlogEntity[]> {
-             const mongoDb =new MongoDb();
-             const collection = await  mongoDb.dbconnect('blogs');    
-             let rslt = collection.find({}).toArray();
-           return rslt;
+            console.log('yes');
+            let rslt;
+            const collection = MongoDb.dbconnect('blogs');
+            await collection.then(col =>{
+                rslt= col.find({}).toArray();
+            });
+            return rslt;
+          
       }
      async insertOne(b: BlogEntity): Promise<boolean> {
-            const mongoDb =new MongoDb();
-            const collection=await mongoDb.dbconnect('blogs');
-            const rslt=await collection.insertOne(b);
-          return rslt;
+      throw new Error('Method not implemented.');
+          //   const mongoDb =new MongoDb();
+          //   const collection=await mongoDb.dbconnect('blogs');
+          //   const rslt=await collection.insertOne(b);
+          // return rslt;
     }
 
     async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
@@ -39,51 +44,62 @@ export interface BlogDal {
     }
 
     async findOneAndAddNewPosts(bid: string,posts:Array<PostEntity>):Promise<boolean> {
-      const Character = require('../blog/blogSchema');
-      var ObjectId =new mongoose.Types.ObjectId(bid);
-      const filter = {'_id':bid}
-      let doc = await Character.updateOne(filter,{'posts': posts} );
-      return doc;
+      throw new Error('Method not implemented.');
+      // const Character = require('../blog/blogSchema');
+      // var ObjectId =new mongoose.Types.ObjectId(bid);
+      // const filter = {'_id':bid}
+      // let doc = await Character.updateOne(filter,{'posts': posts} );
+      // return doc;
     }
 
     async findOneAndUpdateAuthor(bid: string,u:UserEntity):Promise<boolean> {
-      const Character = require('../blog/blogSchema');
-      var ObjectId =new mongoose.Types.ObjectId(bid);
-      const filter = {'_id':bid}
-      let doc = await Character.updateOne(filter,{'author': u } );
-      return doc;
+      throw new Error('Method not implemented.');
+      // const Character = require('../blog/blogSchema');
+      // var ObjectId =new mongoose.Types.ObjectId(bid);
+      // const filter = {'_id':bid}
+      // let doc = await Character.updateOne(filter,{'author': u } );
+      // return doc;
     }
     async  findOne(id: string):  Promise<BlogEntity> {
-           let ObjectId =mongUtility.getObjectId(id);
-           const mongoDb =new MongoDb();
-           const collection = await mongoDb.dbconnect('blogs');    
-           const rslt = collection.findOne({'_id':ObjectId});
-         return rslt;
-    
+
+        //    let ObjectId =mongUtility.getObjectId(id);
+        //    const mongoDb =new MongoDb();
+        //    const collection = await mongoDb.dbconnect('blogs');    
+        //    const rslt = collection.findOne({'_id':ObjectId});
+        //  return rslt;
+        let ObjectId =mongUtility.getObjectId(id);
+        let rslt;
+        const collection = MongoDb.dbconnect('blogs');
+        await collection.then(col =>{
+            rslt= col.findOne({'_id':ObjectId});
+        });
+        return rslt;
     }
 
     async updateOne(id :string ,b: BlogEntity): Promise<boolean> {
-      var ObjectId =mongUtility.getObjectId(id);
-      const mongoDb =new MongoDb();
-            const collection=await mongoDb.dbconnect('blogs');
-           const rslt=  collection.updateOne({'_id':ObjectId}, { $set: { 
-                    'title':b.title ,
-                    'author': b.author,
-                    'date': b.date,
-                    'body': b.body,
-                    'rate': b.rate,
-                    'posts': b.posts }} ,{ upsert: true });
-
-          return rslt;
-
+      let ObjectId =mongUtility.getObjectId(id);
+        let rslt;
+        const collection = MongoDb.dbconnect('blogs');
+        await collection.then(col =>{
+              rslt= col.updateOne({'_id':ObjectId}, { $set: { 
+                              'title':b.title ,
+                              'author': b.author,
+                              'date': b.date,
+                              'body': b.body,
+                              'rate': b.rate,
+                              'posts': b.posts }} ,{ upsert: true });
+              });
+        return rslt;
     }
 
     async  deleteOne(id: string): Promise<BlogEntity>  {
-      var ObjectId =mongUtility.getObjectId(id);
-      const mongoDb =new MongoDb();
-      const collection=await mongoDb.dbconnect('blogs');
-                  const rslt=collection.deleteOne({'_id':ObjectId});
-          return rslt;
+      let ObjectId =mongUtility.getObjectId(id);
+      let rslt;
+      const collection = MongoDb.dbconnect('blogs');
+      await collection.then(col =>{
+            rslt= col.deleteOne({'_id':ObjectId});
+      });
+      return rslt;
     }
 
 }
