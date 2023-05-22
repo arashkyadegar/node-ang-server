@@ -21,7 +21,6 @@ export interface BlogDal {
 
     export class BlogDalConc implements BlogDal {
     async  find(): Promise<BlogEntity[]> {
-            console.log('yes');
             let rslt;
             const collection = MongoDb.dbconnect('blogs');
             await collection.then(col =>{
@@ -31,11 +30,13 @@ export interface BlogDal {
           
       }
      async insertOne(b: BlogEntity): Promise<boolean> {
-      throw new Error('Method not implemented.');
-          //   const mongoDb =new MongoDb();
-          //   const collection=await mongoDb.dbconnect('blogs');
-          //   const rslt=await collection.insertOne(b);
-          // return rslt;
+          let rslt;
+          const collection = MongoDb.dbconnect('blogs');
+          await collection.then(col =>{
+              rslt= col.insertOne(b);
+          });
+          return rslt;
+
     }
 
     async findPostsById(tmp_bid,tmp_pid):Promise<PostEntity>{
@@ -61,12 +62,6 @@ export interface BlogDal {
       // return doc;
     }
     async  findOne(id: string):  Promise<BlogEntity> {
-
-        //    let ObjectId =mongUtility.getObjectId(id);
-        //    const mongoDb =new MongoDb();
-        //    const collection = await mongoDb.dbconnect('blogs');    
-        //    const rslt = collection.findOne({'_id':ObjectId});
-        //  return rslt;
         let ObjectId =mongUtility.getObjectId(id);
         let rslt;
         const collection = MongoDb.dbconnect('blogs');
