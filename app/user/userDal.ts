@@ -20,7 +20,8 @@ export class UserDalConc implements UserDal {
       const collection = MongoDb.dbconnect('users');
       await collection.then(col =>{
           rslt= col.insertOne({
-           name:validator.escape(userEntity.name)
+           name:validator.escape(userEntity.name),
+           password:userEntity.password
           });
       });
       return rslt;

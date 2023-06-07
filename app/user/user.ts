@@ -3,9 +3,8 @@ import { UserDal, UserDalConc } from './userDal';
 import { UserBus, UserBusConc } from './userBus';
 import { UserEntity,UserEntitySchema } from './userEntity';
 import { takeWhile, Observable, of, map, fromEvent, take, first } from 'rxjs';
-// import { validate } from 'class-validator';
 import validator from 'validator';
-import Joi from 'joi';
+
 
 export const UserRouter=express.Router();
             const userBus=new UserBusConc(new UserDalConc());

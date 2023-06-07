@@ -3,6 +3,7 @@ import {IUser,UserEntity} from './userEntity';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import { UserDal } from './userDal';
+import { HashPassword } from '../utility/hashUtility';
 export interface UserBus {
     insertOne(blog:UserEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<UserEntity[]>; // returns Array of objects.
@@ -18,6 +19,9 @@ export class UserBusConc implements UserBus {
       this.db=db;
     }
     async insertOne( user: UserEntity): Promise<boolean> {
+      let hashPassword=new HashPassword();
+       let hashedPassword=await hashPassword.createHash(user.password);
+         user.password=hashedPassword;
                      const p=await this.db.insertOne(user);     
                      return p;
      }

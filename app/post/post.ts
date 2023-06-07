@@ -2,28 +2,40 @@ import express from 'express';
 import validator from 'validator';
 import { PostDalConc } from './postDal';
 import { PostEntity, PostEntitySchema } from './postEntity';
-import { takeWhile, Observable, of, map, fromEvent, take, first } from 'rxjs';
+import { takeWhile, Observable, of, map, fromEvent, take, from } from 'rxjs';
 import { PostBusConc } from './postBus';
 
 export const PostRouter=express.Router();
             const postBus=new PostBusConc(new PostDalConc());
+
+
             PostRouter.post("/",async function(req,res,next){
                 let rslt; //result
                 const  postEntity = req.body as PostEntity;
-                const { error } = PostEntitySchema.validate(postEntity);
-                    if(error){
-                        rslt =`validation failed. errors: ${error}` ;
-                        res.statusCode=400;
-                        res.send(rslt);
-                    }else{
-                        try{
-                            rslt =await postBus.insertOne(postEntity);
-                            res.statusCode=200;
-                            res.send(rslt);
-                        }catch(e){
-                            next(e);
-                        }
-                    }
+                ////
+                const array$=from(postEntity.documents);
+
+                array$.pipe(
+                    map( (value:any) =>validator.escape(value.toString()))
+                ).subscribe(     
+                    console.log
+                )
+
+
+                // const { error } = PostEntitySchema.validate(postEntity);
+                //     if(error){
+                //         rslt =`validation failed. errors: ${error}` ;
+                //         res.statusCode=400;
+                //         res.send(rslt);
+                //     }else{
+                //         try{
+                //             rslt =await postBus.insertOne(postEntity);
+                //             res.statusCode=200;
+                             res.send(rslt);
+                //         }catch(e){
+                //             next(e);
+                //         }
+                //     }
             });
 
 

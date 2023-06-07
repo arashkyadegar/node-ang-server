@@ -17,6 +17,9 @@ var app = express();
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
+//cookie secure
+//res.cookie('rememberme', 'yes', { expires: new Date(Date.now() + 900000), httpOnly: true, secure: true });
+
 // parse application/json
 app.use(bodyParser.json())
 

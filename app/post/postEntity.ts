@@ -15,7 +15,7 @@ export abstract class IPost {
     img!:string;
     date!: Date;
     isVisible!: boolean;
-     documents!: Array<DocumentEntity>;
+    documents!: Array<DocumentEntity>;
     // comments!: Array<CommentEntity>;
 }
 export const PostEntitySchema = Joi.object({
