@@ -1,4 +1,4 @@
-import {IBlog,BlogEntity} from './blogEntity';
+import {IBlog,BlogEntity,BlogEntitySrchResponse} from './blogEntity';
 import {PostEntity} from '../post/postEntity';
 import {mongUtility} from '../utility/mongooseUtility';
 import {validate} from 'class-validator';
@@ -7,11 +7,15 @@ import mongoose from 'mongoose';
 import { UserEntity } from '../user/userEntity';
 import { MongoDb } from '../config/mongodb';
 import { MongoClient } from 'mongodb';
+import { json } from 'body-parser';
+import { promises } from 'dns';
 
 export interface BlogDal {
+    findCount():Promise<number>;
+    search(page:number,title:string):Promise<BlogEntity[]>;
     findPostsById(bid: string,pid:string):Promise<PostEntity>;
     insertOne(b:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
-    find():Promise<BlogEntity[]>; // returns Array of objects.
+    find(page:number,title:string):Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(id:string,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity> ; //returns true if delete is successful othewise false.
@@ -20,14 +24,35 @@ export interface BlogDal {
 }
 
     export class BlogDalConc implements BlogDal {
-    async  find(): Promise<BlogEntity[]> {
+      async findCount():Promise<number> {
+        let rslt=0;
+        const collection = MongoDb.dbconnect('blogs');
+        await collection.then (col => {
+          rslt=col.find({}).count();
+        });
+        return rslt;
+      }
+
+    async  find(page:number,title:string): Promise<BlogEntity[]> {
             let rslt;
             const collection = MongoDb.dbconnect('blogs');
+            let x= page* 5;
             await collection.then(col =>{
-                rslt= col.find({}).toArray();
+              rslt= col.find({"title" :{$regex:title}}).skip(x).limit(5).sort({"title":1, "date":-1}).toArray();
+
+                //rslt= col.find({}).skip(x).limit(5).sort({"title":1, "date":-1}).toArray();
             });
             return rslt;
-          
+      }
+      async search(page:number,title:string):  Promise<BlogEntity[]> {
+        let rslt;
+        let x= page* 5;
+        console.log(`page = ${page} title =${title}`);
+        const collection = MongoDb.dbconnect('blogs');
+        await collection.then(col =>{
+            rslt= col.find({"title" :{$regex:title}}).skip(x).limit(5).sort({"title":1, "date":-1}).toArray();
+        });
+        return rslt;
       }
      async insertOne(b: BlogEntity): Promise<boolean> {
           let rslt;

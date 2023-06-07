@@ -1,4 +1,4 @@
-import {IBlog,BlogEntity} from './blogEntity';
+import {IBlog,BlogEntity,BlogEntitySrchResponse} from './blogEntity';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
 import { BlogDalConc,BlogDal } from './blogDal';
@@ -7,13 +7,17 @@ import { PostEntity } from '../post/postEntity';
 import mongoose from 'mongoose';
 export interface BlogBus {
     insertOne(blog:BlogEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
-    find(): Promise<BlogEntity[]>; // returns Array of objects.
+    find(page:number,title:string): Promise<BlogEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<BlogEntity>; //returns found object.
     updateOne(id:string,b:BlogEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id:string):Promise<BlogEntity>; //returns true if delete is successful othewise false.
 }
 
 export class BlogBusConc implements BlogBus {
+ async search(page:number,title:string) {
+    const rslt=await this.db.search(page,title);
+    return rslt;
+  }
   private db:BlogDal;
   constructor(db:BlogDal){
     this.db=db;
@@ -54,11 +58,14 @@ export class BlogBusConc implements BlogBus {
                     return rslt;
     }
 
-   async find(): Promise<BlogEntity[]>{
-        const rslt = await this.db.find();
+   async find(page:number,title:string): Promise<BlogEntity[]>{
+        const rslt = await this.db.find(page,title);
         return rslt;
     }
-
+    async findCount():Promise<number> {
+      const rslt = await this.db.findCount();
+      return rslt;
+    }
   async  findOne(id: string): Promise<BlogEntity> {
        // var _array = require('lodash/array');
         const rslt=await this.db.findOne(id);

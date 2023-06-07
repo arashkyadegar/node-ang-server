@@ -7,10 +7,12 @@ const router=express.Router();
 const HomeRouter=require('../home/home');
 const BlogRouter=require('../blog/blog');
 const PostRouter=require('../post/post');
+const UserRouter=require('../user/user');
 const UploadRouter=require('../upload/upload');
 module.exports = function(app){
     app.use('/home',HomeRouter);
     app.use('/blogs',BlogRouter);
     app.use('/posts',PostRouter);
     app.use('/uploads',UploadRouter);
+    app.use('/users',UserRouter);
 };

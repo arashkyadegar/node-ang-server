@@ -2,46 +2,44 @@ import {IUser,UserEntity} from './userEntity';
 
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
+import { UserDal } from './userDal';
 export interface UserBus {
     insertOne(blog:UserEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
-    find():Array<UserEntity>; // returns Array of objects.
-    findOne(id:number):UserEntity; //returns found object.
-    updateOne(id:number,b:UserEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
-    deleteOne(id:number):boolean; //returns true if delete is successful othewise false.
+    find():Promise<UserEntity[]>; // returns Array of objects.
+    findOne(id:string): Promise<UserEntity> //returns found object.
+    updateOne(id:string,b:UserEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
+    deleteOne(id:string): Promise<boolean> ; //returns true if delete is successful othewise false.
 }
 
 
 export class UserBusConc implements UserBus {
-    async insertOne( blog: UserEntity): Promise<boolean> {
-                     const p=await validate(blog);
-                     if(p.length >0 )
-                         return false;
-                         return true;
-                         
+    private db:UserDal;
+    constructor(db:UserDal){
+      this.db=db;
+    }
+    async insertOne( user: UserEntity): Promise<boolean> {
+                     const p=await this.db.insertOne(user);     
+                     return p;
      }
  
-     find(): UserEntity[] {
-         let x=new Array<UserEntity>();
-             x.push(new UserEntity());
-             x.push(new UserEntity());
-             x.push(new UserEntity());
-         return x;
+     async   find(): Promise<UserEntity[]> {
+        const p=await this.db.find();     
+        return p;
      }
  
-     findOne(id: number): UserEntity {
-
-         throw new Error('Method not implemented.');
+     async   findOne(id: string): Promise<UserEntity> {
+        const p=await this.db.findOne(id);     
+        return p;
      }
  
-     async updateOne(id: number, blog: UserEntity): Promise<boolean> {
-         let validation_rslt=false;
-         // check class validation
-             const p=await validate(blog);
-             if(p.length >0 )
-                 return false;
-                 return true;
+     async  updateOne(id: string, userEntity: UserEntity): Promise<boolean> {
+            let rslt;
+            rslt=await this.db.updateOne(id,userEntity);  
+            return rslt;
      }
-     deleteOne(id: number): boolean {
-         throw new Error('Method not implemented.');
+   async  deleteOne(id: string):  Promise<boolean>  {
+        let rslt;
+        rslt=await this.db.deleteOne(id);  
+        return rslt;
      }
  }

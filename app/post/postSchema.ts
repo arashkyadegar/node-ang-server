@@ -10,8 +10,8 @@ export const postSchema = new Schema({
     img: String,
     date:Date,
     isVisible: Boolean,
-  documents: [documentSchema],
-   comments: [commentSchema]
+    documents: [documentSchema],
+    comments: [commentSchema]
      /* user: Number,
 ,*/
 });

@@ -1,12 +1,23 @@
 import express, { query } from 'express';
 import { BlogBusConc } from './blogBus';
-import {BlogEntity,IBlog} from './blogEntity';
+import {BlogEntity,IBlog,BlogEntitySrchResponse} from './blogEntity';
 import { UserEntity } from '../user/userEntity';
 import {PostEntity} from '../post/postEntity';
 import { BlogDalConc } from './blogDal';
 import mongoose from 'mongoose';
+import validator from 'validator';
 export const BlogRouter=express.Router();
         const blog_bus=new BlogBusConc(new BlogDalConc());
+
+        BlogRouter.get("/search/",async function(req,res){
+      
+          let title=req.query.title!.toString();
+          
+          let pageNo=req.query.page!.toString();
+
+        const rslt=await blog_bus.find(parseInt(pageNo),title);
+                 res.send(rslt);
+        });
 
         BlogRouter.put("/:bid/author/",async function(req,res){
           if(!parseInt(req.params.bid)) {
@@ -67,29 +78,38 @@ export const BlogRouter=express.Router();
         //   }
         // });
 
-       BlogRouter.get("/",async function(req,res){
-          let rslt = await blog_bus.find();
+       BlogRouter.get("/",async function(req,res,next){
+        let    rslt;
+              try{
+                        let rslt:any;
+                        let pageNo=req.query.page!.toString();
+                        const rowCounts=2;
+                        rslt=await blog_bus.find(parseInt(pageNo),"" );
+              }catch(e){
+                next(e);
+              }
           res.statusCode=200;
           res.send(rslt);
         });
 
-        BlogRouter.get("/:bid",async function(req,res){
-          //should add validation for _id throw new BSONError
-            let rslt=new BlogEntity();
-            let tmp_id=req.params.bid;
-            rslt =await blog_bus.findOne(tmp_id);
-            res.statusCode=200;
-            res.send(rslt);
+        BlogRouter.get("/:id",async function(req,res){
+          let rslt;
+          if(validator.isMongoId(req.params.id.toString())){
+             rslt=new BlogEntity();
+             let tmp_id=req.params.id;
+             rslt =await blog_bus.findOne(tmp_id);
+          }
+             res.statusCode=200;
+             res.send(rslt);
         });
 
         BlogRouter.post("/",async function(req,res){
            const tmp_blog=<BlogEntity> req.body;
            tmp_blog._id =new mongoose.Types.ObjectId();
-           tmp_blog.author._id=new mongoose.Types.ObjectId();
+          // tmp_blog.author._id=new mongoose.Types.ObjectId();
            tmp_blog.date=new Date();
            tmp_blog.rate=1;
            let rslt= await blog_bus.insertOne(tmp_blog);
-          //  console.log(rslt);
             if(!rslt){
                 res.statusCode=400;
                 res.send({'error' : 'server error.'});

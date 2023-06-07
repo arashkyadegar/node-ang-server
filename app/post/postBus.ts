@@ -1,47 +1,44 @@
 import {IPost,PostEntity} from './postEntity';
 import {validate} from 'class-validator';
 import { rejects } from 'assert';
-import { PostDalConc } from '../post/postDal';
+import { PostDal, PostDalConc } from '../post/postDal';
 export interface PostBus {
     insertOne(blog:PostEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
-    find():Array<PostEntity>; // returns Array of objects.
+    find(page:number,title:string):Promise<PostEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<PostEntity>; //returns found object.
-    updateOne(id:number,b:PostEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
-    deleteOne(id:number):boolean; //returns true if delete is successful othewise false.
+    updateOne(id:string,b:PostEntity):Promise<boolean>;  //returns true if update is succefull otherwise false.
+    deleteOne(id:string):Promise<boolean>; //returns true if delete is successful othewise false.
 }
 
 
 export class PostBusConc implements PostBus {
-    async insertOne( blog: PostEntity): Promise<boolean> {
-                     const p=await validate(blog);
-                     if(p.length >0 )
-                         return false;
-                         return true;
-                         
+
+    private db:PostDal;
+    constructor(db:PostDal){
+      this.db=db;
+    }
+    async insertOne( post: PostEntity): Promise<boolean> {
+        const p=await this.db.insertOne(post);     
+        return p;        
      }
  
-     find(): PostEntity[] {
-         let x=new Array<PostEntity>();
-
-         return x;
+    async find(page:number,title:string): Promise<PostEntity[]>  {
+        let rslt;
+             rslt = await this.db.find(page,title);
+            return rslt;
      }
  
     async findOne(id: string): Promise<PostEntity> {
         const db=new PostDalConc();
-        //const p=await validate(blog);
         const rslt=await db.findOne(id);
         return rslt;
      }
  
-     async updateOne(id: number, blog: PostEntity): Promise<boolean> {
-         let validation_rslt=false;
-         // check class validation
-             const p=await validate(blog);
-             if(p.length >0 )
-                 return false;
-                 return true;
+     async updateOne(id: string, post: PostEntity): Promise<boolean> {
+        const p=await this.db.updateOne(id,post);     
+        return p;
      }
-     deleteOne(id: number): boolean {
+     deleteOne(id: string): Promise<boolean> {
          throw new Error('Method not implemented.');
      }
  }

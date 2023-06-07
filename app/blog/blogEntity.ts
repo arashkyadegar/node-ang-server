@@ -11,8 +11,9 @@ import {
     Max,
     min,
     MAX,
+    
   } from 'class-validator';
-  import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { IPost, PostEntity } from '../post/postEntity';
 import { IUser, UserEntity } from '../user/userEntity';
 import { CommentEntity, IComment } from '../comment/commentEntity';
@@ -26,10 +27,14 @@ import { CommentEntity, IComment } from '../comment/commentEntity';
         rate!: number;
         posts!: Array<IPost>;
   }
-
+export class BlogEntitySrchResponse {
+    items = new Array<BlogEntity>();
+    itemsCount=0;
+}
 export class BlogEntity extends IBlog {
 }
 
 module.exports={
-    BlogEntity
+    BlogEntity,
+    BlogEntitySrchResponse
 }
