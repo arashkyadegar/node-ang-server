@@ -14,8 +14,11 @@
     "formidable": "^2.1.1",
     "joi": "^17.9.2",
     "joi-objectid": "^4.0.2",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.2",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
   },
   "scripts": {
     "build": "npx tsc --watch",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^18.15.2",
     "class-validator": "^0.14.0",
     "concurrently": "^7.6.0",

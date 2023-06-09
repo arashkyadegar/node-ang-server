@@ -5,12 +5,14 @@ export interface  IUser {
     _id:string;
     name:string;
     password:string;
+    token:string;
 }
 
 export class UserEntity implements IUser {
     _id: string="";
     name:string="";
     password:string="";
+    token:string="";
 }
 
 export const UserEntitySchema = Joi.object({

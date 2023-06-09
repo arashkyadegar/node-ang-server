@@ -1,6 +1,7 @@
 import { UserBusConc } from '../user/userBus';
 import { UserDalConc } from '../user/userDal';
-import {HashPassword} from '../utility/hashUtility'
+import {HashPassword} from '../utility/hashUtility';
+import jwt from 'jsonwebtoken';
 export const LocalPassport = (passport: any, strategy: any) => {
     const userBus=new UserBusConc(new UserDalConc());
     passport.use(
@@ -14,7 +15,7 @@ export const LocalPassport = (passport: any, strategy: any) => {
         async (req: Request, email: string, password: string, done: any) => {
           try {
             const user = await userBus.findByName(email)
-            console.log(user);
+
             if (!user) {
               return done(null, false)
             }
@@ -23,6 +24,18 @@ export const LocalPassport = (passport: any, strategy: any) => {
             if (!passCheck) {
               return done(null, false)
             }
+                // Create token
+                    const token = jwt.sign(
+                        { user_id: user._id, email },
+                        "abc",  ///temprory TOKEN_KEY
+                        {
+                        expiresIn: "2h",
+                        }
+                    );
+                    // save user token
+                    user.token = token;
+
+
             return done(null, user)
           } catch (error) {
             console.log(error)

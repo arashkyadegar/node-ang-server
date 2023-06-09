@@ -5,6 +5,7 @@ import { rejects } from 'assert';
 import { MongoDb } from '../config/mongodb';
 import { mongUtility } from '../utility/mongooseUtility';
 import validator from 'validator';
+
 export interface UserDal {
     findByName(name:string):Promise<UserEntity>;
     insertOne(b:UserEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.

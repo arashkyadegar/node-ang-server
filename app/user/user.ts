@@ -4,16 +4,16 @@ import { UserBus, UserBusConc } from './userBus';
 import { UserEntity,UserEntitySchema } from './userEntity';
 import { takeWhile, Observable, of, map, fromEvent, take, first } from 'rxjs';
 import validator from 'validator';
-import passport from 'passport'
-import Strategy from 'passport-local'
+import passport from 'passport';
+import Strategy from 'passport-local';
 import { LocalPassport } from '../passport/localPassport'
-
+import {verifyToken} from "../passport/jwt-middleware";
 
 export const UserRouter=express.Router();
-LocalPassport(passport, Strategy.Strategy)
+            LocalPassport(passport, Strategy.Strategy)
             const userBus=new UserBusConc(new UserDalConc());
-            UserRouter.post('/login', passport.authenticate('local',{session: false}), async (req, res) => {
-  
+            UserRouter.post('/login',passport.authenticate('local',{session: false}),async (req, res) => {
+             console.log(req['user']);
                 try {
                   res.send('logged in')
                 } catch (error) {
@@ -39,7 +39,7 @@ LocalPassport(passport, Strategy.Strategy)
                     }
             });
 
-            UserRouter.get("/",async function(req,res,next){
+            UserRouter.get("/",verifyToken,async function(req,res,next){
                 let rslt:any;
                 // let pageNo:string="0";
                 // let title:string="";
