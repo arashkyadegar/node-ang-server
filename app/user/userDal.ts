@@ -6,6 +6,7 @@ import { MongoDb } from '../config/mongodb';
 import { mongUtility } from '../utility/mongooseUtility';
 import validator from 'validator';
 export interface UserDal {
+    findByName(name:string):Promise<UserEntity>;
     insertOne(b:UserEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<UserEntity[]>; // returns Array of objects.
     findOne(id:string):Promise<UserEntity>; //returns found object.
@@ -26,7 +27,14 @@ export class UserDalConc implements UserDal {
       });
       return rslt;
     }
-
+async findByName(name:string): Promise<UserEntity>{
+  let rslt;
+  const collection = MongoDb.dbconnect('users');
+  await collection.then(col =>{
+      rslt= col.findOne({'name':validator.escape(name)});
+  });
+  return rslt;
+}
   async  find(): Promise<UserEntity[]>{
     let rslt;
             const collection = MongoDb.dbconnect('users');

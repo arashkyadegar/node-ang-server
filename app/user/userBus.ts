@@ -5,6 +5,7 @@ import { rejects } from 'assert';
 import { UserDal } from './userDal';
 import { HashPassword } from '../utility/hashUtility';
 export interface UserBus {
+    findByName(name:string):Promise<UserEntity>;
     insertOne(blog:UserEntity):Promise<boolean>; // returns true if insert is succefull otherwise false.
     find():Promise<UserEntity[]>; // returns Array of objects.
     findOne(id:string): Promise<UserEntity> //returns found object.
@@ -17,6 +18,10 @@ export class UserBusConc implements UserBus {
     private db:UserDal;
     constructor(db:UserDal){
       this.db=db;
+    }
+   async findByName(name:string):Promise<UserEntity>{
+      const p=await this.db.findByName(name);     
+      return p;
     }
     async insertOne( user: UserEntity): Promise<boolean> {
       let hashPassword=new HashPassword();
