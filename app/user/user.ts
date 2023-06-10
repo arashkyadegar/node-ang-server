@@ -4,22 +4,13 @@ import { UserBus, UserBusConc } from './userBus';
 import { UserEntity,UserEntitySchema } from './userEntity';
 import { takeWhile, Observable, of, map, fromEvent, take, first } from 'rxjs';
 import validator from 'validator';
-import passport from 'passport';
-import Strategy from 'passport-local';
-import { LocalPassport } from '../passport/localPassport'
 import {verifyToken} from "../passport/jwt-middleware";
 
+
 export const UserRouter=express.Router();
-            LocalPassport(passport, Strategy.Strategy)
+
             const userBus=new UserBusConc(new UserDalConc());
-            UserRouter.post('/login',passport.authenticate('local',{session: false}),async (req, res) => {
-             console.log(req['user']);
-                try {
-                  res.send('logged in')
-                } catch (error) {
-                  console.log(error)
-                }
-              })
+
             UserRouter.post("/",async function(req,res,next){
                 let rslt; //result
                 const  userEntity = req.body as UserEntity;

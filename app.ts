@@ -39,9 +39,9 @@ app.use(fileUpload());
 require('./app/routes/index')(app);
 
 //error catching middleware
-app.use((err, req, res, next) => {
-  res.status(500).send(`error : ${err.message}`);
-})
+// app.use((err, req, res, next) => {
+//   res.status(500).send(`error : ${err.message}`);
+// })
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

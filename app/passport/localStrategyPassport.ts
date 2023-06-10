@@ -2,10 +2,11 @@ import { UserBusConc } from '../user/userBus';
 import { UserDalConc } from '../user/userDal';
 import {HashPassword} from '../utility/hashUtility';
 import jwt from 'jsonwebtoken';
+var LocalStrategy    = require('passport-local').Strategy;
 export const LocalPassport = (passport: any, strategy: any) => {
     const userBus=new UserBusConc(new UserDalConc());
     passport.use(
-      new strategy(
+      new LocalStrategy(
         {
           usernameField: 'name',
           passwordField: 'password',
