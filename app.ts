@@ -4,7 +4,14 @@ var http=require('http');
 var express = require('express');
 const fileUpload = require('express-fileupload');
 const bodyParser = require("body-parser");
+const logger = require("./app/utility/logger");
+/////////////////security helpers libraries//////////////////////
+import helmet from "helmet";
 import csrfProtection from '@authentication/csrf-protection';
+import rateLimit from 'express-rate-limit'
+
+
+////////////////////////////////////////////////////////////////
 //import  {router} from './app/routes';
 //require('./app/config/db')();
 
@@ -13,6 +20,15 @@ const port = process.env.PORT;
 
 var app = express();
 //app.use(csrfProtection());
+//app.use(helmet());
+
+// const limiter = rateLimit({
+// 	windowMs: 15 * 60 * 1000, // 15 minutes
+// 	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+// 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+// 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+// })
+// app.use(limiter);
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -44,7 +60,7 @@ require('./app/routes/index')(app);
 // })
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
 

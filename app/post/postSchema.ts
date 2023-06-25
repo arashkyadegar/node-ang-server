@@ -12,8 +12,8 @@ export const postSchema = new Schema({
     isVisible: Boolean,
     documents: [documentSchema],
     comments: [commentSchema]
-     /* user: Number,
-,*/
+    /* user: Number,
+    ,*/
 });
 //module.exports = mongoose.model('posts', postSchema);
 //module.exports.posts = mongoose.model('posts', postSchema);

@@ -4,6 +4,7 @@ import GoogleStrategy from 'passport-google-oauth20';
 import LocalStrategy from 'passport-local';
 import { GooglePassport } from '../passport/googlestrategyPassport';
 import { LocalPassport } from '../passport/localStrategyPassport';
+import { UserEntity } from '../user/userEntity';
    export const AuthRouter=express.Router();
 
    LocalPassport(passport, LocalStrategy.Strategy);
@@ -30,13 +31,28 @@ import { LocalPassport } from '../passport/localStrategyPassport';
 ////////////////////////////////////////////////////////////
 
             AuthRouter.post('/login',passport.authenticate('local',{session: false}),async (req, res) => {
-
-
-                console.log(req['user']);
+                const user=<UserEntity> req['user'];
+                const rememberUser = req.body.remember;
+                if(user != undefined)
                    try {
-                     res.send('logged in')
+                    if(rememberUser){
+                              res.cookie(`user-cookie`,{
+                                id:user._id,
+                                name:user.name,
+                                token:user.token
+                              },{
+                                maxAge: 5000,
+                                // expires works the same as the maxAge
+                                //expires: new Date('01 12 2021'),
+                                secure: true,
+                                httpOnly: true,
+                                sameSite: 'lax'
+                            });
+                          }
+                    res.statusCode=200;
+                     res.send(user);
                    } catch (error) {
-                     console.log(error)
+                    res.send({rslt:'not true'});
                    }
                  })
 

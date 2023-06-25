@@ -1,9 +1,11 @@
 import { UserBusConc } from '../user/userBus';
 import { UserDalConc } from '../user/userDal';
 import {HashPassword} from '../utility/hashUtility';
+
 import jwt from 'jsonwebtoken';
 var LocalStrategy    = require('passport-local').Strategy;
 export const LocalPassport = (passport: any, strategy: any) => {
+    const logger = require("../utility/logger");
     const userBus=new UserBusConc(new UserDalConc());
     passport.use(
       new LocalStrategy(
@@ -15,14 +17,15 @@ export const LocalPassport = (passport: any, strategy: any) => {
         },
         async (req: Request, email: string, password: string, done: any) => {
           try {
-            const user = await userBus.findByName(email)
-
+            const user = await userBus.findByName(email);
             if (!user) {
+              logger.log("warning",`invaliad username `);
               return done(null, false)
             }
             const hashUtiliy=new HashPassword();
             const passCheck = await hashUtiliy.validateUser(password, user.password);
             if (!passCheck) {
+              logger.log("warning",`invaliad password `);
               return done(null, false)
             }
                 // Create token
@@ -35,7 +38,6 @@ export const LocalPassport = (passport: any, strategy: any) => {
                     );
                     // save user token
                     user.token = token;
-
 
             return done(null, user)
           } catch (error) {

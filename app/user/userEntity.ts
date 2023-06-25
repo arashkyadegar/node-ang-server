@@ -2,17 +2,19 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 
 export interface  IUser {
-    _id:string;
+    _id:mongoose.Types.ObjectId;
     name:string;
     password:string;
     token:string;
+    remember:boolean;
 }
 
 export class UserEntity implements IUser {
-    _id: string="";
+    _id:any;
     name:string="";
     password:string="";
     token:string="";
+    remember:boolean=false;
 }
 
 export const UserEntitySchema = Joi.object({

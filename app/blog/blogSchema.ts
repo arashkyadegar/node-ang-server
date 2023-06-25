@@ -6,16 +6,15 @@ import { commentSchema } from '../comment/commentSchema';
 
 export const blogSchema = new Schema({
   _id:ObjectId,
-    title: String ,
-      author : {
-        _id:ObjectId,
-        name:String
-      },
-     body: String,
-     rate:Number,
-     date:Date,
-     posts:[postSchema]
-
+  title: String ,
+  author : {
+    _id:ObjectId,
+    name:String
+  },
+  body: String,
+  rate:Number,
+  date:Date,
+  posts:[postSchema]
 });
 
 //module.exports.Blogs = mongoose.model('blogs');

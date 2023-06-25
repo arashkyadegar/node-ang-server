@@ -8,4 +8,3 @@ export const commentSchema = new Schema({
     isVisible:Boolean,
     date:String
 });
-module.exports.comments = mongoose.model('comments', commentSchema);
