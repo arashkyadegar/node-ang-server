@@ -27,7 +27,7 @@ const {ObjectId} = require('mongodb');
       const collection = MongoDb.dbconnect('posts');
       let x = page* 5;
       await collection.then(col =>{
-        rslt = col.find({"title" :{$regex:title}})
+        rslt = col.find({"title" :{$regex:validator.escape(title)}})
         .skip(x).limit(5).sort({"title": 1, "date": -1}).toArray();
       });
       console.log(rslt);
@@ -61,9 +61,9 @@ const {ObjectId} = require('mongodb');
         date: new Date(postEntity.date),
         isVisible: postEntity.isVisible ,
         documents: postEntity.documents,
-        tags:postEntity.tags,
-        links:postEntity.links,
-        comments:postEntity.comments
+        tags: postEntity.tags,
+        links: postEntity.links,
+        comments: postEntity.comments
       });
       });
     return rslt;

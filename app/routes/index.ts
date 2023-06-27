@@ -9,6 +9,7 @@ const BlogRouter=require('../blog/blog');
 const PostRouter=require('../post/post');
 const UserRouter=require('../user/user');
 const AuthRouter=require('../auth/auth');
+const CommentRouter=require('../comment/comment');
 const UploadRouter=require('../upload/upload');
 module.exports = function(app){
     app.use('/home',HomeRouter);
@@ -17,4 +18,5 @@ module.exports = function(app){
     app.use('/uploads',UploadRouter);
     app.use('/users',UserRouter);
     app.use('/auth',AuthRouter);
+    app.use('/comments',CommentRouter);
 };

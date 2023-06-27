@@ -5,6 +5,7 @@ import { rejects } from 'assert';
 import { MongoDb } from '../config/mongodb';
 import { mongUtility } from '../utility/mongooseUtility';
 import validator from 'validator';
+import mongoose from 'mongoose';
 
 export interface UserDal {
     findByName(name:string):Promise<UserEntity>;
@@ -17,16 +18,47 @@ export interface UserDal {
 
 export class UserDalConc implements UserDal {
      async insertOne(userEntity: UserEntity): Promise<boolean> {
-
       let rslt;
       const collection = MongoDb.dbconnect('users');
       await collection.then(col =>{
           rslt= col.insertOne({
-           name:validator.escape(userEntity.name),
-           password:userEntity.password
+           name: validator.escape(userEntity.name),
+           password: userEntity.password,
+           tags: userEntity.tags,
+           likes: userEntity.likes
           });
       });
       return rslt;
+    }
+    async insertOneTag(id: string,tagName: string): Promise<boolean> {
+      let rslt;
+      let userObjectId = new mongoose.Types.ObjectId(id);
+      const collection = MongoDb.dbconnect('users');
+      await collection.then(col =>{
+        rslt = col.updateOne({"_id": userObjectId} ,
+          {$push: {"tags": validator.escape(tagName)}
+        })
+      }
+      )
+      return rslt;
+    }
+
+    async insertOneLike(id: string,likeName: string): Promise<boolean> {
+      let rslt;
+      let userObjectId = new mongoose.Types.ObjectId(id);
+      const collection = MongoDb.dbconnect('users');
+      await collection.then(col =>{
+        rslt = col.updateOne({"_id": userObjectId} ,
+          {$push: {"likes": validator.escape(likeName)}
+        })
+      }
+      )
+      return rslt;
+    }
+
+
+    async removeOneTag(id: string,tagName: string) {
+
     }
 async findByName(name:string): Promise<UserEntity>{
   let rslt;

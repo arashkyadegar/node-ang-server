@@ -7,29 +7,51 @@ export interface CommentDal {
   insertOne(id: string,b: CommentEntity): Promise<boolean>; // returns true if insert is succefull otherwise false.
   updateOne(id: string,b: CommentEntity): Promise<boolean>;  //returns true if update is succefull otherwise false.
   deleteOne(id: string): Promise<boolean> ; //returns true if delete is successful othewise false.
+  updateCommentIsVisible(postId: string,commentId: string ,isVisible: boolean ): Promise<boolean>;
+
 }
 
 export class CommentDalConc implements CommentDal {
- async insertOne(id: string, commentEntity: CommentEntity): Promise<boolean> {
+
+  async updateCommentIsVisible(postId: string,commentId: string ,isVisible: boolean ): Promise<boolean> {
     let rslt;
-    let blogObjectId =new mongoose.Types.ObjectId(id);
-    let userObjectId2 =new mongoose.Types.ObjectId(commentEntity.user);
+    let postObjectId =new mongoose.Types.ObjectId(postId);
+    let commentObjectId =new mongoose.Types.ObjectId(commentId);
     const collection = MongoDb.dbconnect('posts');
     await collection.then(col =>{
-      rslt= col.updateOne({"_id":blogObjectId} ,
-        {$push: {"comments":{
-                  'id':'2',
-                  'user':userObjectId2 ,
+      rslt= col.updateOne({"comments.id": {$eq: commentObjectId}},
+      {
+       $set: {"comments.$[el].isVisible": isVisible}}, {arrayFilters: [{"el.id": {$eq: "2"}}]})
+      }
+    )
+
+return true;
+  }
+ async insertOne(id: string, commentEntity: CommentEntity): Promise<boolean> {
+    let rslt;
+    var objectId = new mongoose.Types.ObjectId();
+    let postObjectId =new mongoose.Types.ObjectId(id);
+    let userObjectId2 =new mongoose.Types.ObjectId(commentEntity.user);
+
+
+    const collection = MongoDb.dbconnect('posts');
+    await collection.then(col =>{
+      rslt= col.updateOne({"_id": postObjectId} ,
+        {$push: {"comments": {
+                  'id': objectId,
+                  'user': userObjectId2 ,
                   'text': commentEntity.text,
                   'rate': commentEntity.rate,
-                  'isVisible':commentEntity.isVisible ,
-                  'date':new Date()
+                  'isVisible': commentEntity.isVisible ,
+                  'date': new Date()
                   }}})
                        }
     )
     return rslt;
 }
-  updateOne(id: string, b: CommentEntity): Promise<boolean> {
+updateOne(id: string,b: CommentEntity): Promise<boolean>  {
+
+
     throw new Error("Method not implemented.");
   }
   deleteOne(id: string): Promise<boolean> {
