@@ -8,10 +8,30 @@ export interface CommentDal {
   updateOne(id: string,b: CommentEntity): Promise<boolean>;  //returns true if update is succefull otherwise false.
   deleteOne(id: string): Promise<boolean> ; //returns true if delete is successful othewise false.
   updateCommentIsVisible(postId: string,commentId: string ,isVisible: boolean ): Promise<boolean>;
-
+  findOne(commentId: string): Promise<CommentEntity>;
+  findAllByPostId(postId: string): Promise<CommentEntity[]>;
 }
 
 export class CommentDalConc implements CommentDal {
+  async findOne(commentId: string): Promise<CommentEntity> {
+    let rslt;
+    let commentObjectId =new mongoose.Types.ObjectId(commentId);
+    const collection = MongoDb.dbconnect('posts');
+    await collection.then(col =>{
+      rslt = col.findOne({"comments.id": commentObjectId}).toArray();
+    });
+    return rslt.comments;
+  }
+async  findAllByPostId(postId: string): Promise<CommentEntity[]> {
+    let rslt;
+    let postObjectId =new mongoose.Types.ObjectId(postId);
+    const collection = MongoDb.dbconnect('posts');
+    await collection.then(col =>{
+      rslt = col.find({"_id": postObjectId},{"comments":1})
+      .sort({"date": -1}).toArray();
+    });
+    return rslt.comments;
+  }
 
   async updateCommentIsVisible(postId: string,commentId: string ,isVisible: boolean ): Promise<boolean> {
     let rslt;
@@ -21,7 +41,7 @@ export class CommentDalConc implements CommentDal {
     await collection.then(col =>{
       rslt= col.updateOne({"comments.id": {$eq: commentObjectId}},
       {
-       $set: {"comments.$[el].isVisible": isVisible}}, {arrayFilters: [{"el.id": {$eq: "2"}}]})
+       $set: {"comments.$[el].isVisible": isVisible}}, {arrayFilters: [{"el.id": {$eq:commentObjectId}}]})
       }
     )
 
@@ -38,7 +58,7 @@ return true;
     await collection.then(col =>{
       rslt= col.updateOne({"_id": postObjectId} ,
         {$push: {"comments": {
-                  'id': objectId,
+                  '_id': objectId,
                   'user': userObjectId2 ,
                   'text': commentEntity.text,
                   'rate': commentEntity.rate,

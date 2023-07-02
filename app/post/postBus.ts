@@ -4,11 +4,11 @@ import { rejects } from 'assert';
 import { PostDal, PostDalConc } from '../post/postDal';
 export interface PostBus {
   insertOne(blog: PostEntity): Promise<boolean>; // returns true if insert is succefull otherwise false.
-  find(title: string,page: number): Promise<PostEntity[]>; // returns Array of objects.
+  find(page: number): Promise<PostEntity[]>; // returns Array of objects.
   findOne(id: string): Promise<PostEntity>; //returns found object.
   updateOne(id: string,b: PostEntity): Promise<boolean>;  //returns true if update is succefull otherwise false.
   deleteOne(id: string): Promise<boolean>; //returns true if delete is successful othewise false.
-
+  search(title: string,page: number): Promise<PostEntity[]>; 
 }
 
 export class PostBusConc implements PostBus {
@@ -16,26 +16,24 @@ export class PostBusConc implements PostBus {
   constructor(db: PostDal){
     this.db = db; 
 }
+async advanceSearch(title: string , isVisible:boolean): Promise<PostEntity[]> {
+  const p = await this.db.advanceSearch(title,isVisible);     
+  return p;   
+}
 
 
 async insertOne(post: PostEntity): Promise<boolean> {
   const p = await this.db.insertOne(post);     
   return p;        
 }
-
-async find( title: string,page: number): Promise<PostEntity[]> {
+async search(title: string, page: number): Promise<PostEntity[]> {
   let rslt;
- 
-  if(title.trim() === '') {
-    console.log('empty')
+  rslt = await this.db.search(title,page)
+  return rslt;
+}
+async find(page: number): Promise<PostEntity[]> {
+  let rslt;
     rslt = await this.db.find(page);
-  }
-  else {
-    console.log('title =',title)
-    rslt = await this.db.search(title,page);
-
-  }
-
   return rslt;
 }
 

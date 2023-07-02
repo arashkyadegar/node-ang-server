@@ -11,6 +11,7 @@ import validator from 'validator';
 import { MongoClient } from 'mongodb';
 import { json } from 'body-parser';
 import { promises } from 'dns';
+import { postQueryGenerator } from '../utility/queryMaker';
 const {ObjectId} = require('mongodb');
   export interface PostDal {
     search(title: string,page: number): Promise<PostEntity[]>;
@@ -19,18 +20,34 @@ const {ObjectId} = require('mongodb');
     findOne(id: string): Promise<PostEntity>; //returns found object.
     updateOne(id: string,b: PostEntity): Promise<boolean>;  //returns true if update is succefull otherwise false.
     deleteOne(id: string): Promise<boolean> ; //returns true if delete is successful othewise false.
+    advanceSearch(title: string , isVisible:boolean): Promise<PostEntity[]> ;
   }
 
   export class PostDalConc implements PostDal {
+    async advanceSearch(title: string , isVisible:boolean): Promise<PostEntity[]> {
+      let rslt;
+      const collection = MongoDb.dbconnect('posts');
+      await collection.then(col => {
+        const queryGenerator = new postQueryGenerator('',title,'',4,new Date(),isVisible,[],[]);
+        const query =queryGenerator.generate();
+        rslt = col.find(query).toArray();
+      })
+      return rslt;
+    }
     async search(title: string,page: number): Promise<PostEntity[]> {
       let rslt;
       const collection = MongoDb.dbconnect('posts');
       let x = page* 5;
-      await collection.then(col =>{
-        rslt = col.find({"title" :{$regex:validator.escape(title)}})
-        .skip(x).limit(5).sort({"title": 1, "date": -1}).toArray();
+      await collection.then(col => {
+        const queryGenerator = new postQueryGenerator('',title,'',4,new Date(),false,[],[]);
+        const query =queryGenerator.generate();
+        rslt = col.find(query)
+         .skip(x).limit(5).sort({"title": 1, "date": -1}).toArray();
+
+        // rslt = col.find({"title" :{$regex:validator.escape(title)}})
+        // .skip(x).limit(5).sort({"title": 1, "date": -1}).toArray();
       });
-      console.log(rslt);
+      console.log(`result = ${rslt}`);
       return rslt;
     }
 
@@ -38,7 +55,7 @@ const {ObjectId} = require('mongodb');
       let rslt;
       const collection = MongoDb.dbconnect('posts');
       let x = page* 5;
-      console.log(x);
+
       await collection.then(col =>{
         rslt = col.find({})
         .skip(x).limit(5).sort({"title": 1, "date": -1}).toArray();
