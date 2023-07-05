@@ -4,8 +4,11 @@ import { DocumentEntity, IDocument } from "../document/documentEntity";
 import { IUser } from "../user/userEntity";
 import mongoose from "mongoose";
 import { CommentEntity } from "../comment/commentEntity";
+
+
 var Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+
 
 export abstract class IPost {
   _id!: mongoose.Types.ObjectId;
@@ -21,6 +24,7 @@ export abstract class IPost {
   links = [];
   comments!: Array<CommentEntity>;
 }
+
 
 export const PostEntitySchema = Joi.object({
   _id:Joi.required(false),
@@ -48,8 +52,11 @@ export const PostEntitySchema = Joi.object({
   isVisible:Joi.boolean()
   });
 
+
 export class PostEntity extends IPost {
 }
+
+
 
 module.exports={
   PostEntity,

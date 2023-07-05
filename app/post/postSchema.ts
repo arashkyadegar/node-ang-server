@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+
 import { commentSchema } from '../comment/commentSchema';
 import { documentSchema } from '../document/documentSchema';
 export const postSchema = new Schema({
@@ -12,8 +13,5 @@ export const postSchema = new Schema({
     isVisible: Boolean,
     documents: [documentSchema],
     comments: [commentSchema]
-    /* user: Number,
-    ,*/
 });
-//module.exports = mongoose.model('posts', postSchema);
-//module.exports.posts = mongoose.model('posts', postSchema);
+

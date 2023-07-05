@@ -26,7 +26,8 @@ export class postQueryGenerator implements QueryGenerator {
 
   generate(): JSON {
     let rslt = this.getTitleQuery();
-   rslt = rslt + this.getIsVisibileQuery();
+    rslt = rslt + this.getIsVisibileQuery();
+    rslt = rslt + this.getRateQuery();
     rslt = rslt.slice(0, -1); 
     // JSON.parse('{"body": {"$regex" :"' + validator.escape(this.body) + '"}}');
     // JSON.parse('{"rate": {"$eq" :"' + this.rate + '"}}');

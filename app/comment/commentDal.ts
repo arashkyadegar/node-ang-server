@@ -4,8 +4,8 @@ import { MongoDb } from "../config/mongodb";
 import validator from "validator";
 
 export interface CommentDal {
-  insertOne(id: string,b: CommentEntity): Promise<boolean>; // returns true if insert is succefull otherwise false.
-  updateOne(id: string,b: CommentEntity): Promise<boolean>;  //returns true if update is succefull otherwise false.
+  insertOne(id: string,commentEntity: CommentEntity): Promise<boolean>; // returns true if insert is succefull otherwise false.
+  updateOne(id: string,commentEntity: CommentEntity): Promise<boolean>;  //returns true if update is succefull otherwise false.
   deleteOne(id: string): Promise<boolean> ; //returns true if delete is successful othewise false.
   updateCommentIsVisible(postId: string,commentId: string ,isVisible: boolean ): Promise<boolean>;
   findOne(commentId: string): Promise<CommentEntity>;
@@ -69,7 +69,7 @@ return true;
     )
     return rslt;
 }
-updateOne(id: string,b: CommentEntity): Promise<boolean>  {
+updateOne(id: string,commentEntity: CommentEntity): Promise<boolean>  {
 
 
     throw new Error("Method not implemented.");
